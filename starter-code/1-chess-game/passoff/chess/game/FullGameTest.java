@@ -16,7 +16,7 @@ public class FullGameTest {
         game.makeMove(new ChessMove(new ChessPosition(2, 5), new ChessPosition(4, 5), null));
         /*
         |r|n|b|q|k|b|n|r|
-		|p|p|p|p|p|p|p|p|
+		|p|p|p|p|p|p|p|p|~
 		| | | | | | | | |
 		| | | | | | | | |
 		| | | | |P| | | |
