@@ -297,44 +297,44 @@ public class ChessPiece {
     private Collection<ChessMove> knightMoves(ChessBoard board, ChessPosition myPosition) {
         Collection<ChessMove> moves = new ArrayList<>();
 
-        // move (2up, 1left) (only if in bounds, not blocked by own piece) (it can move there if there is an enemy piece)
-        if (myPosition.getRow() < 7 && myPosition.getColumn() > 2 && (board.getPiece(new ChessPosition(myPosition.getRow() + 2, myPosition.getColumn() - 1)) == null || board.getPiece(new ChessPosition(myPosition.getRow() + 2, myPosition.getColumn() - 1)).getTeamColor() != pieceColor)) {
-            moves.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() + 2, myPosition.getColumn() - 1), null));
-        }
-
-        // move (2up, 1right) (only if in bounds, not blocked by own piece) (it can move there if there is an enemy piece)
-        if (myPosition.getRow() < 7 && myPosition.getColumn() < 7 && (board.getPiece(new ChessPosition(myPosition.getRow() + 2, myPosition.getColumn() + 1)) == null || board.getPiece(new ChessPosition(myPosition.getRow() + 2, myPosition.getColumn() + 1)).getTeamColor() != pieceColor)) {
-            moves.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() + 2, myPosition.getColumn() + 1), null));
-        }
-
-        // move (2down, 1left) (only if in bounds, not blocked by own piece) (it can move there if there is an enemy piece)
-        if (myPosition.getRow() > 2 && myPosition.getColumn() > 2 && (board.getPiece(new ChessPosition(myPosition.getRow() - 2, myPosition.getColumn() - 1)) == null || board.getPiece(new ChessPosition(myPosition.getRow() - 2, myPosition.getColumn() - 1)).getTeamColor() != pieceColor)) {
-            moves.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() - 2, myPosition.getColumn() - 1), null));
-        }
-
-        // move (2down, 1right) (only if in bounds, not blocked by own piece) (it can move there if there is an enemy piece)
-        if (myPosition.getRow() > 2 && myPosition.getColumn() < 7 && (board.getPiece(new ChessPosition(myPosition.getRow() - 2, myPosition.getColumn() + 1)) == null || board.getPiece(new ChessPosition(myPosition.getRow() - 2, myPosition.getColumn() + 1)).getTeamColor() != pieceColor)) {
-            moves.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() - 2, myPosition.getColumn() + 1), null));
-        }
-
-        // move (1up, 2left) (only if in bounds, not blocked by own piece) (it can move there if there is an enemy piece)
-        if (myPosition.getRow() < 8 && myPosition.getColumn() > 1 && (board.getPiece(new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() - 2)) == null || board.getPiece(new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() - 2)).getTeamColor() != pieceColor)) {
+        // move up left (only if in bounds, not blocked by own piece) (it can move up left if there is an enemy piece)
+        if (myPosition.getRow() < 8 && myPosition.getColumn() > 2 && (board.getPiece(new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() - 2)) == null || board.getPiece(new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() - 2)).getTeamColor() != pieceColor)) {
             moves.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() - 2), null));
         }
 
-        // move (1up, 2right) (only if in bounds, not blocked by own piece) (it can move there if there is an enemy piece)
-        if (myPosition.getRow() < 8 && myPosition.getColumn() < 8 && (board.getPiece(new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() + 2)) == null || board.getPiece(new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() + 2)).getTeamColor() != pieceColor)) {
+        // move up right (only if in bounds, not blocked by own piece) (it can move up right if there is an enemy piece)
+        if (myPosition.getRow() < 8 && myPosition.getColumn() < 7 && (board.getPiece(new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() + 2)) == null || board.getPiece(new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() + 2)).getTeamColor() != pieceColor)) {
             moves.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() + 2), null));
         }
 
-        // move (1down, 2left) (only if in bounds, not blocked by own piece) (it can move there if there is an enemy piece)
-        if (myPosition.getRow() > 1 && myPosition.getColumn() > 1 && (board.getPiece(new ChessPosition(myPosition.getRow() - 1, myPosition.getColumn() - 2)) == null || board.getPiece(new ChessPosition(myPosition.getRow() - 1, myPosition.getColumn() - 2)).getTeamColor() != pieceColor)) {
+        // move down left (only if in bounds, not blocked by own piece) (it can move down left if there is an enemy piece)
+        if (myPosition.getRow() > 1 && myPosition.getColumn() > 2 && (board.getPiece(new ChessPosition(myPosition.getRow() - 1, myPosition.getColumn() - 2)) == null || board.getPiece(new ChessPosition(myPosition.getRow() - 1, myPosition.getColumn() - 2)).getTeamColor() != pieceColor)) {
             moves.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() - 1, myPosition.getColumn() - 2), null));
         }
 
-        // move (1down, 2right) (only if in bounds, not blocked by own piece) (it can move there if there is an enemy piece)
-        if (myPosition.getRow() > 1 && myPosition.getColumn() < 8 && (board.getPiece(new ChessPosition(myPosition.getRow() - 1, myPosition.getColumn() + 2)) == null || board.getPiece(new ChessPosition(myPosition.getRow() - 1, myPosition.getColumn() + 2)).getTeamColor() != pieceColor)) {
+        // move down right (only if in bounds, not blocked by own piece) (it can move down right if there is an enemy piece)
+        if (myPosition.getRow() > 1 && myPosition.getColumn() < 7 && (board.getPiece(new ChessPosition(myPosition.getRow() - 1, myPosition.getColumn() + 2)) == null || board.getPiece(new ChessPosition(myPosition.getRow() - 1, myPosition.getColumn() + 2)).getTeamColor() != pieceColor)) {
             moves.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() - 1, myPosition.getColumn() + 2), null));
+        }
+
+        // move left up (only if in bounds, not blocked by own piece) (it can move left up if there is an enemy piece)
+        if (myPosition.getRow() < 7 && myPosition.getColumn() > 1 && (board.getPiece(new ChessPosition(myPosition.getRow() + 2, myPosition.getColumn() - 1)) == null || board.getPiece(new ChessPosition(myPosition.getRow() + 2, myPosition.getColumn() - 1)).getTeamColor() != pieceColor)) {
+            moves.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() + 2, myPosition.getColumn() - 1), null));
+        }
+
+        // move left down (only if in bounds, not blocked by own piece) (it can move left down if there is an enemy piece)
+        if (myPosition.getRow() > 2 && myPosition.getColumn() > 1 && (board.getPiece(new ChessPosition(myPosition.getRow() - 2, myPosition.getColumn() - 1)) == null || board.getPiece(new ChessPosition(myPosition.getRow() - 2, myPosition.getColumn() - 1)).getTeamColor() != pieceColor)) {
+            moves.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() - 2, myPosition.getColumn() - 1), null));
+        }
+
+        // move right up (only if in bounds, not blocked by own piece) (it can move right up if there is an enemy piece)
+        if (myPosition.getRow() < 7 && myPosition.getColumn() < 8 && (board.getPiece(new ChessPosition(myPosition.getRow() + 2, myPosition.getColumn() + 1)) == null || board.getPiece(new ChessPosition(myPosition.getRow() + 2, myPosition.getColumn() + 1)).getTeamColor() != pieceColor)) {
+            moves.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() + 2, myPosition.getColumn() + 1), null));
+        }
+
+        // move right down (only if in bounds, not blocked by own piece) (it can move right down if there is an enemy piece)
+        if (myPosition.getRow() > 2 && myPosition.getColumn() < 8 && (board.getPiece(new ChessPosition(myPosition.getRow() - 2, myPosition.getColumn() + 1)) == null || board.getPiece(new ChessPosition(myPosition.getRow() - 2, myPosition.getColumn() + 1)).getTeamColor() != pieceColor)) {
+            moves.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() - 2, myPosition.getColumn() + 1), null));
         }
 
         return moves;
@@ -493,6 +493,7 @@ public class ChessPiece {
         }
         return moves;
     }
+
 
     @Override
     public boolean equals(Object o) {
