@@ -11,10 +11,12 @@ import java.util.Collection;
  */
 public class ChessGame {
 
-    TeamColor teamTurn;
+    private TeamColor teamTurn;
+    private ChessBoard board;
 
     public ChessGame() {
         this.teamTurn = TeamColor.WHITE;
+        this.board = new ChessBoard();
     }
 
     /**
@@ -49,51 +51,22 @@ public class ChessGame {
      * startPosition
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
-        Collection<ChessMove> validMoves = new ArrayList<>();
-        ChessPiece piece = getBoard().getPiece(startPosition);
-        // check if piece is null
-        if (piece == null) {
-            return null;
+        var validMoves = new ArrayList<ChessMove>();
+        var piece = board.getPiece(startPosition);
+
+        // check if piece is not null
+        if (piece != null) {
+            var possibleMoves = piece.pieceMoves(board, startPosition);
+
+            // filter out invalid moves and illegal moves
+            for (var move : possibleMoves) {
+                if (board.isLegalMove(move)) {
+                    validMoves.add(move);
+                }
+            }
         }
-        // check if piece is on the right team
-        if (piece.getTeamColor() != getTeamTurn()) {
-            return null;
-        }
-        // calculate valid moves for each type of piece
-        validMoves = switch (piece.getPieceType()) {
-            case PAWN -> validPawnMoves(startPosition);
-            case ROOK -> validRookMoves(startPosition);
-            case KNIGHT -> validKnightMoves(startPosition);
-            case BISHOP -> validBishopMoves(startPosition);
-            case QUEEN -> validQueenMoves(startPosition);
-            case KING -> validKingMoves(startPosition);
-        };
 
         return validMoves;
-    }
-
-    private Collection<ChessMove> validKingMoves(ChessPosition startPosition) {
-        throw new RuntimeException("Not implemented");
-    }
-
-    private Collection<ChessMove> validQueenMoves(ChessPosition startPosition) {
-        throw new RuntimeException("Not implemented");
-    }
-
-    private Collection<ChessMove> validBishopMoves(ChessPosition startPosition) {
-        throw new RuntimeException("Not implemented");
-    }
-
-    private Collection<ChessMove> validKnightMoves(ChessPosition startPosition) {
-        throw new RuntimeException("Not implemented");
-    }
-
-    private Collection<ChessMove> validRookMoves(ChessPosition startPosition) {
-        throw new RuntimeException("Not implemented");
-    }
-
-    private Collection<ChessMove> validPawnMoves(ChessPosition startPosition) {
-        throw new RuntimeException("Not implemented");
     }
 
     /**
@@ -152,6 +125,6 @@ public class ChessGame {
      * @return the chessboard
      */
     public ChessBoard getBoard() {
-        throw new RuntimeException("Not implemented");
+        return new ChessBoard();
     }
 }
