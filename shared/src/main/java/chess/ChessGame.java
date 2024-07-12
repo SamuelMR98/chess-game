@@ -1,7 +1,10 @@
 package chess;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 
 /**
  * For a class that can manage a chess game, making moves on a board
@@ -171,5 +174,28 @@ public class ChessGame {
      */
     public ChessBoard getBoard() {
         return board;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        var game = (ChessGame) o;
+
+        if (!Objects.equals(board, game.board)) return false;
+        return teamTurn == game.teamTurn;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = board != null ? board.hashCode() : 0;
+        result = 31 * result + (teamTurn != null ? teamTurn.hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return new Gson().toJson(this);
     }
 }
