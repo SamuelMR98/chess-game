@@ -68,6 +68,36 @@ public class ChessBoard {
         board[7][4] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KING);
     }
 
+    /**
+     * Checks if a move is legal
+     *
+     * @param move the move to check
+     * @return true if the move is legal, false otherwise
+     */
+    public boolean isLegalMove(ChessMove move) {
+        ChessPiece piece = getPiece(move.getStartPosition());
+
+        // basic checks
+        if (piece == null) {
+            return false;
+        }
+
+        // Check if move is castling and if it is valid
+        if (isCastling(piece, move)) {
+            if (!isValidCastling(piece, move)) {
+                return false;
+            }
+        }
+
+        // Test if this move causes the king to be in check
+        ChessBoard newBoard = new ChessBoard();
+        newBoard.movePiece(move);
+        ChessPiece king = newBoard.getPosition(piece.getTeamColor(), ChessPiece.PieceType.KING);
+        return king == null || !king.isAttacked(newBoard);
+    }
+
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
