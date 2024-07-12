@@ -124,7 +124,21 @@ public class ChessGame {
      * @return True if the specified team is in stalemate, otherwise false
      */
     public boolean isInStalemate(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        var kingPosition = board.getPosition(teamColor, ChessPiece.PieceType.KING);
+        if (kingPosition.isAttacked(board)) {
+            return false;
+        }
+
+        // Check for valid moves for all pieces
+        for (var position : board.collection()) {
+            if (position.getPiece().getTeamColor() == teamColor) {
+                var validMoves = validMoves(position.getPosition());
+                if (!validMoves.isEmpty()) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     /**
