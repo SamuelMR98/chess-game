@@ -104,9 +104,9 @@ public class ChessGame {
      * @return True if the specified team is in check
      */
     public boolean isInCheck(TeamColor teamColor) {
-        var kingPosition = board.getPosition(teamColor, ChessPiece.PieceType.KING);
+        var kingSquare = board.getSquare(teamColor, ChessPiece.PieceType.KING);
 
-        return kingPosition.isAttacked(board);
+        return kingSquare.isAttacked(board);
     }
 
     /**
@@ -116,17 +116,22 @@ public class ChessGame {
      * @return True if the specified team is in checkmate
      */
     public boolean isInCheckmate(TeamColor teamColor) {
-        var kingPosition = board.getPosition(teamColor, ChessPiece.PieceType.KING);
-        if (!kingPosition.isAttacked(board)) {
+        var kingSquare = board.getSquare(teamColor, ChessPiece.PieceType.KING);
+        if (!kingSquare.isAttacked(board)) {
             return false;
         }
 
         // Check for valid moves for all pieces
-        for (var position : board.collection()) {
-            if (position.getPiece().getTeamColor() == teamColor) {
-                var validMoves = validMoves(position.getPosition());
-                if (!validMoves.isEmpty()) {
-                    return false;
+        for (var square : board.chessSquareCollection()) {
+            if (square.getPiece().getTeamColor() == teamColor) {
+                for (var move : square.pieceMoves(board)) {
+                    var newBoard = new ChessBoard(board);
+                    newBoard.movePiece(move);
+                    var newKingSquare = newBoard.getSquare(teamColor, ChessPiece.PieceType.KING);
+
+                    if (!newKingSquare.isAttacked(newBoard)) {
+                        return false;
+                    }
                 }
             }
         }
@@ -141,15 +146,15 @@ public class ChessGame {
      * @return True if the specified team is in stalemate, otherwise false
      */
     public boolean isInStalemate(TeamColor teamColor) {
-        var kingPosition = board.getPosition(teamColor, ChessPiece.PieceType.KING);
-        if (kingPosition.isAttacked(board)) {
+        var kingSquare = board.getSquare(teamColor, ChessPiece.PieceType.KING);
+        if (kingSquare.isAttacked(board)) {
             return false;
         }
 
         // Check for valid moves for all pieces
-        for (var position : board.collection()) {
-            if (position.getPiece().getTeamColor() == teamColor) {
-                var validMoves = validMoves(position.getPosition());
+        for (var squares : board.chessSquareCollection()) {
+            if (squares.getPiece().getTeamColor() == teamColor) {
+                var validMoves = validMoves(squares.getPosition());
                 if (!validMoves.isEmpty()) {
                     return false;
                 }

@@ -17,6 +17,11 @@ public class ChessBoard {
     public ChessBoard() {
         board = new ChessPiece[8][8];
     }
+    public ChessBoard(ChessBoard copy) {
+        for (var i = 0; i < 8; i++) {
+            System.arraycopy(copy.board[i], 0, board[i], 0, 8);
+        }
+    }
 
     /**
      * Adds a chess piece to the chessboard
