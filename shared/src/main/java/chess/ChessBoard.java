@@ -12,10 +12,9 @@ import java.util.ArrayList;
  */
 public class ChessBoard {
 
-    private ChessPiece[][] board;
+    private ChessPiece[][] board = new ChessPiece[8][8];
 
     public ChessBoard() {
-        board = new ChessPiece[8][8];
     }
     public ChessBoard(ChessBoard copy) {
         for (var i = 0; i < 8; i++) {
@@ -83,9 +82,9 @@ public class ChessBoard {
      * @return true if the move is legal, false otherwise
      */
     public boolean isLegalMove(ChessMove move) {
-        ChessPiece piece = getPiece(move.getStartPosition());
+        var piece = getPiece(move.getStartPosition());
 
-        // basic checks
+        // Check if piece exists
         if (piece == null) {
             return false;
         }
@@ -98,7 +97,7 @@ public class ChessBoard {
         }
 
         // Test if this move causes the king to be in check
-        ChessBoard newBoard = new ChessBoard();
+        var newBoard = new ChessBoard(this);
         newBoard.movePiece(move);
         var king = newBoard.getSquare(piece.getTeamColor(), ChessPiece.PieceType.KING);
         return king == null || !king.isAttacked(newBoard);
@@ -199,6 +198,7 @@ public class ChessBoard {
      */
     public Collection<ChessSquare> chessSquareCollection() {
         var squares = new ArrayList<ChessSquare>();
+
         for (var i = 0; i < 8; i++) {
             for (var j = 0; j < 8; j++) {
                 if (board[i][j] != null) {
@@ -296,8 +296,8 @@ public class ChessBoard {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ChessBoard board1 = (ChessBoard) o;
-        return Arrays.deepEquals(board, board1.board);
+        ChessBoard board = (ChessBoard) o;
+        return Arrays.deepEquals(this.board, board.board);
     }
 
     @Override

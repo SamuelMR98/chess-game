@@ -105,6 +105,9 @@ public class ChessGame {
      */
     public boolean isInCheck(TeamColor teamColor) {
         var kingSquare = board.getSquare(teamColor, ChessPiece.PieceType.KING);
+        if (kingSquare == null) {
+            return false;
+        }
 
         return kingSquare.isAttacked(board);
     }
@@ -117,6 +120,9 @@ public class ChessGame {
      */
     public boolean isInCheckmate(TeamColor teamColor) {
         var kingSquare = board.getSquare(teamColor, ChessPiece.PieceType.KING);
+        if (kingSquare == null) {
+            return false;
+        }
         if (!kingSquare.isAttacked(board)) {
             return false;
         }
@@ -147,6 +153,9 @@ public class ChessGame {
      */
     public boolean isInStalemate(TeamColor teamColor) {
         var kingSquare = board.getSquare(teamColor, ChessPiece.PieceType.KING);
+        if (kingSquare == null) {
+            return false;
+        }
         if (kingSquare.isAttacked(board)) {
             return false;
         }
