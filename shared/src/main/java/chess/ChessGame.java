@@ -190,6 +190,10 @@ public class ChessGame {
         return board;
     }
 
+    public static ChessGame createGame(String serializedGame) {
+        return new Gson().fromJson(serializedGame, ChessGame.class);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
