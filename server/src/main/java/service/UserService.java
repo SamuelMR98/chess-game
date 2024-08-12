@@ -4,10 +4,12 @@ import dataaccess.DataAccess;
 import dataaccess.DataAccessException;
 import model.AuthData;
 import model.UserData;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import spark.utils.StringUtils;
 import util.CodedException;
 
+import java.lang.Object;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class UserService {
     final private DataAccess dataAccess;

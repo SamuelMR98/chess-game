@@ -20,7 +20,7 @@ public class MySqlDataAccess implements DataAccess {
         executeCmd("DELETE FROM `game`");
     }
 
-    public UserData writeUser(@org.jetbrains.annotations.NotNull UserData user) throws DataAccessException {
+    public UserData writeUser(UserData user) throws DataAccessException {
         if (user.username() != null) {
             var u = new UserData(user.username(), user.password(), user.email());
             executeUpdate("INSERT INTO `user` (username, password, email) VALUES (?, ?, ?)", u.username(), u.password(), u.email());

@@ -4,8 +4,9 @@ import dataaccess.DataAccess;
 import dataaccess.DataAccessException;
 import model.AuthData;
 import model.UserData;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import util.CodedException;
+
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class AuthService {
     private final DataAccess dataAccess;
