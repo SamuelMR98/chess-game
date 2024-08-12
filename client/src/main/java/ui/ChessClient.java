@@ -6,6 +6,9 @@ import util.ExceptionUtil;
 import util.ResponseException;
 
 import java.util.Arrays;
+import java.util.List;
+
+import static util.EscapeSequences.*;
 
 
 public class ChessClient implements DisplayHandler {
@@ -110,6 +113,15 @@ public class ChessClient implements DisplayHandler {
         return "Failed to create game";
     }
 
+    private record Help(String cmd, String description) {}
+
+    private String getHelp(List<Help> help) {
+        var sb = new StringBuilder();
+        for (var h : help) {
+            sb.append(String.format("  %s%s%s - %s%s%s%n", SET_TEXT_COLOR_BLUE, h.cmd, RESET_TEXT_COLOR, SET_TEXT_COLOR_MAGENTA, h.description, RESET_TEXT_COLOR));
+        }
+        return sb.toString();
+    }
     private void verifyAuth() throws ResponseException {
         if (token == null) {
             throw new ResponseException(401, "Please login (register) first");
