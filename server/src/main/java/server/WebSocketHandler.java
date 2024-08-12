@@ -133,7 +133,7 @@ public class WebSocketHandler {
                 Connection.sendError(session.getRemote(), "unknown user");
             }
         } catch (Exception e) {
-            Connection.sendError(session.getRemote(), util.ExceptionUtil.getRoot(e).getMessage());
+            Connection.sendError(session.getRemote(), util.ExceptionUtil.getRootCause(e).getMessage());
         }
     }
 
