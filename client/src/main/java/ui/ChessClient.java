@@ -7,6 +7,7 @@ import util.ResponseException;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Collection;
 
 import static util.EscapeSequences.*;
 
@@ -123,6 +124,38 @@ public class ChessClient implements DisplayHandler {
         System.out.print((gameData.game().getBoard()).toString(color, highlights));
         System.out.println();
     }
+
+    public void printPrompt() {
+        String gameState = "Not playing";
+        if (gameData != null) {
+            gameState = switch (gameData.state()) {
+                case UNDECIDED -> String.format("%s's turn", gameData.game().getTeamTurn());
+                case DRAW -> "Draw";
+                case BLACK -> "Black won";
+                case WHITE -> "White Won";
+            };
+        }
+        System.out.print(RESET_TEXT_COLOR + String.format("\n[%s: %s] >>> ", state, gameState) + SET_TEXT_COLOR_GREEN);
+    }
+
+    public boolean isPlaying() {
+        return (gameData != null && (state == State.WHITE || state == State.BLACK) && !isGameOver());
+    }
+
+
+    public boolean isObserving() {
+        return (gameData != null && (state == State.OBSERVING));
+    }
+
+    public boolean isGameOver() {
+        return (gameData != null && gameData.isGameOver());
+    }
+
+    public boolean isTurn() {
+        return (isPlaying() && state.isPlaying(gameData.game().getTeamTurn()));
+    }
+
+
     @Override
     public void updateBoard(GameData newGameData) {
         gameData = newGameData;
@@ -130,7 +163,7 @@ public class ChessClient implements DisplayHandler {
         printPrompt();
 
         if (isGameOver()) {
-            userState = State.LOGGED_IN;
+            state = State.LOGGED_IN;
             printPrompt();
             gameData = null;
         }
