@@ -48,6 +48,58 @@ public class WebSocketHandler {
 
     }
 
+    public static class ConnectionManager {
+        public final ConcurrentHashMap<String, Connection> connections = new ConcurrentHashMap<>();
+
+        public void add(String username, Connection connection) {
+            connections.put(username, connection);
+        }
+
+        public Connection get(String username) {
+            return connections.get(username);
+        }
+
+        public void remove(Session session) {
+            Connection removeConnection = null;
+            for (var c : connections.values()) {
+                if (c.session.equals(session)) {
+                    removeConnection = c;
+                    break;
+                }
+            }
+
+            if (removeConnection != null) {
+                connections.remove(removeConnection.user.username());
+            }
+        }
+
+        public void broadcast(int gameID, String excludeUsername, String msg) throws Exception {
+            var removeList = new ArrayList<Connection>();
+            for (var c : connections.values()) {
+                if (c.session.isOpen()) {
+                    if (c.game.gameID() == gameID && !StringUtil.isEqual(c.user.username(), excludeUsername)) {
+                        c.send(msg);
+                    }
+                } else {
+                    removeList.add(c);
+                }
+            }
+            for (var c : removeList) {
+                connections.remove(c.user.username());
+            }
+        }
+
+        @Override
+        public String toString() {
+            var sb = new StringBuilder("[\n");
+            for (var c : connections.values()) {
+                sb.append(String.format("  {'game':%d, 'user': %s}%n", c.game.gameID(), c.user));
+            }
+            sb.append("]");
+            return sb.toString();
+        }
+    }
+
     private final ConnectionManager connections = new ConnectionManager();
 
     public WebSocketHandler(DataAccess dataAccess) {
@@ -92,15 +144,15 @@ public class WebSocketHandler {
      * @throws Exception if there is an error joining the game
      */
     private void join(Connection connection, JoinPlayerCommand command) throws Exception {
-        var gameData = dataAccess.readGame(command.gameID);
+        var gameData = dataAccess.readGame(command.gameId);
         if (gameData != null) {
-            var expectedUsername = (command.playerColor == ChessGame.TeamColor.BLACK) ? gameData.blackUsername() : gameData.whiteUsername();
+            var expectedUsername = (command.teamColor == BLACK) ? gameData.blackUsername() : gameData.whiteUsername();
             if (StringUtil.isEqual(expectedUsername, connection.user.username())) {
                 connection.game = gameData;
                 var loadMsg = (new LoadMessage(gameData)).toString();
                 connection.send(loadMsg);
 
-                var notificationMsg = (new NotificationMessage(String.format("%s joined %s as %s", connection.user.username(), gameData.gameName(), command.playerColor))).toString();
+                var notificationMsg = (new NotificationMessage(String.format("%s joined %s as %s", connection.user.username(), gameData.gameName(), command.teamColor))).toString();
                 connections.broadcast(gameData.gameID(), connection.user.username(), notificationMsg);
             } else {
                 connection.sendError("player has not joined game");
@@ -116,7 +168,7 @@ public class WebSocketHandler {
      * @throws Exception
      */
     private void observe(Connection connection, GameCommand command) throws Exception {
-        var gameData = dataAccess.readGame(command.gameID);
+        var gameData = dataAccess.readGame(command.gameId);
         if (gameData != null) {
             connection.game = gameData;
             var loadMsg = (new LoadMessage(gameData)).toString();
@@ -135,7 +187,7 @@ public class WebSocketHandler {
      * @throws Exception if there is an error moving
      */
     private void move (Connection connection, MoveCommand command) throws Exception {
-        var gameData = dataAccess.readGame(command.gameID);
+        var gameData = dataAccess.readGame(command.gameId);
         if (gameData != null) {
             if (!gameData.isGameOver()) {
                 if (isTurn(gameData, command.move, connection.user.username())) {
@@ -167,7 +219,7 @@ public class WebSocketHandler {
      * @throws Exception if there is an error resigning
      */
     private void resign(Connection connection, GameCommand command) throws Exception {
-        var gameData = dataAccess.readGame(command.gameID());
+        var gameData = dataAccess.readGame(command.gameId);
         if (gameData != null && !gameData.isGameOver()) {
             var playerColor = getPlayerColor(gameData, connection.user.username());
             if (playerColor != null) {
@@ -193,7 +245,7 @@ public class WebSocketHandler {
      * @throws Exception if there is an error leaving the game
      */
     private void leave(Connection connection, GameCommand command) throws Exception {
-        var gameData = dataAccess.readGame(command.gameID);
+        var gameData = dataAccess.readGame(command.gameId);
         if (gameData != null) {
             if (StringUtil.isEqual(gameData.blackUsername(), connection.user.username())) {
                 gameData = gameData.setBlack(null);
@@ -249,21 +301,21 @@ public class WebSocketHandler {
         var game = gameData.game();
         if (game.isInStalemate(WHITE) || game.isInStalemate(BLACK)) {
             gameData = gameData.setState(GameData.State.DRAW);
-            notificationMessage = new NotificationMessage("Game Over", "Stalemate");
+            notificationMessage = new NotificationMessage("Game Over (Stalemate) The game is a draw");
         } else if (game.isInCheckmate(WHITE)) {
             gameData = gameData.setState(GameData.State.BLACK);
-            notificationMessage = new NotificationMessage("Game Over", "Checkmate", "Black player, %s, wins!", gameData.blackUsername());
+            notificationMessage = new NotificationMessage(String.format("Game Over, Black player, %s, wins!", gameData.blackUsername()));
         } else if (game.isInCheckmate(BLACK)) {
             gameData = gameData.setState(GameData.State.WHITE);
-            notificationMessage = new NotificationMessage("Game Over", "Checkmate", "White player, %s, wins!", gameData.whiteUsername());
+            notificationMessage = new NotificationMessage(String.format("Game Over, White player, %s, wins!", gameData.whiteUsername()));
         } else if (game.isInCheck(WHITE)) {
-            notificationMessage = new NotificationMessage("Check", "White player is in check");
+            notificationMessage = new NotificationMessage(String.format("Check, White player %s is in check", gameData.whiteUsername()));
         } else if (game.isInCheck(BLACK)) {
-            notificationMessage = new NotificationMessage("Check", "Black player is in check");
+            notificationMessage = new NotificationMessage(String.format("Check, Black player %s is in check", gameData.blackUsername()));
         }
 
         if (notificationMessage != null) {
-            connections.broadcast(gameData.gameID(), notificationMessage.toString());
+            connections.broadcast(gameData.gameID(), "", notificationMessage.toString());
         }
         return gameData;
     }
@@ -276,17 +328,17 @@ public class WebSocketHandler {
      * @throws DataAccessException
      */
     private Connection getConnection(String id, Session session) throws DataAccessException {
-        Connection con = null;
+        Connection connection = null;
         var authData = isAuthorized(id);
         if (authData != null) {
-            con = connections.get(authData.username());
-            if (con == null) {
+            connection = connections.get(authData.username());
+            if (connection == null) {
                 var user = dataAccess.readUser(authData.username());
-                conn = new Connection(user, session);
-                connections.add(authData.username(), conn);
+                connection = new Connection(user, session);
+                connections.add(authData.username(), connection);
             }
         }
-        return con;
+        return connection;
     }
 
     /**
