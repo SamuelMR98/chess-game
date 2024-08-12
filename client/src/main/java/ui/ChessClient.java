@@ -4,7 +4,13 @@ import chess.*;
 import model.GameData;
 import util.ExceptionUtil;
 import util.ResponseException;
+import webSocketMessages.userCommands.GameCommand;
+import webSocketMessages.userCommands.JoinPlayerCommand;
+import webSocketMessages.userCommands.MoveCommand;
+import webSocketMessages.userCommands.UserGameCommand;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Collection;
@@ -112,6 +118,132 @@ public class ChessClient implements DisplayHandler {
             return String.format("Created game %s", gameData.gameID());
         }
         return "Failed to create game";
+    }
+
+    private String list(String[] ignored) throws ResponseException {
+        verifyAuth();
+
+        games = server.listGames(token);
+        StringBuilder sb = new StringBuilder();
+        for (var i = 0; i < games.length; i++) {
+            var game = games[i];
+            sb.append(String.format("%d. %s white:%s black:%s state: %s%n", i, game.gameName(), game.whiteUsername(), game.blackUsername(), game.state()));
+        }
+        return sb.toString();
+    }
+
+    private String join(String[] params) throws Exception {
+        verifyAuth();
+
+        if (state == State.LOGGED_IN) {
+            if (params.length == 2 && (params[1].equalsIgnoreCase("WHITE") || params[1].equalsIgnoreCase("BLACK"))) {
+                var gamePosition = Integer.parseInt(params[0]);
+                if (games != null && gamePosition >= 0 && gamePosition < games.length) {
+                    var gameId = games[gamePosition].gameID();
+                    var color = ChessGame.TeamColor.valueOf(params[1].toUpperCase());
+                    var gameData = server.joinGame(token, gameId, color);
+                    state = (color == ChessGame.TeamColor.WHITE ? State.WHITE : State.BLACK);
+                    webSocket.sendCommand(new JoinPlayerCommand(token, gameId, color));
+
+                    return String.format("Joined game %d as %s", gameData.gameID(), color);
+                }
+            }
+        }
+
+        return "Failed to join game";
+    }
+
+    private String observe(String[] params) throws ResponseException, IOException {
+        verifyAuth();
+
+        if (state == State.LOGGED_IN) {
+            if (params.length == 1) {
+                var gameId = Integer.parseInt(params[0]);
+                var gameData = server.joinGame(token, gameId, null);
+                state = State.OBSERVING;
+                webSocket.sendCommand(new GameCommand(UserGameCommand.CommandType.JOIN_OBSERVER, token, gameId));
+                return String.format("Observing game %d", gameData.gameID());
+            }
+        }
+        return "Failed to observe game";
+    }
+
+    private String redraw(String[] ignored) throws Exception {
+        verifyAuth();
+
+        if (isPlaying() || isObserving()) {
+            printGame();
+            return "";
+        }
+        return "Failed to redraw";
+    }
+
+    private String legal(String[] params) throws Exception {
+        verifyAuth();
+
+        if (isPlaying() || isObserving()) {
+            if (params.length == 1) {
+                var pos = new ChessPosition(params[0]);
+                var highlights = new ArrayList<ChessPosition>();
+                highlights.add(pos);
+                for (var move : gameData.game().validMoves(pos)) {
+                    highlights.add(move.getEndPosition());
+                }
+                var color = state == State.BLACK ? ChessGame.TeamColor.BLACK : ChessGame.TeamColor.WHITE;
+                printGame(color, highlights);
+                return "";
+            }
+        }
+        return "Failed to get legal moves";
+    }
+
+    String move(String[] params) throws Exception {
+        verifyAuth();
+
+        if (isTurn()) {
+            if (params.length == 1) {
+                var move = new ChessMove(params[0]);
+                if (isMoveLegal(move)) {
+                    webSocket.sendCommand(new MoveCommand(token, gameData.gameID(), move));
+                    return "Moved";
+                }
+            }
+        }
+        return "Failed to move";
+    }
+
+    private String leave(String[] ignored) throws Exception {
+        if (isPlaying() || isObserving()) {
+            state = State.LOGGED_IN;
+            webSocket.sendCommand(new GameCommand(UserGameCommand.CommandType.LEAVE, token, gameData.gameID()));
+            gameData = null;
+            return "Left game";
+        }
+        return "Failed to leave game";
+    }
+
+    private String resign(String[] ignored) throws Exception {
+        if (isPlaying()) {
+            webSocket.sendCommand(new GameCommand(UserGameCommand.CommandType.RESIGN, token, gameData.gameID()));
+            state = State.LOGGED_IN;
+            gameData = null;
+            return "Resigned";
+        }
+        return "Failed to resign";
+    }
+
+    public boolean isMoveLegal(ChessMove move) {
+        if (isTurn()) {
+            var board = gameData.game().getBoard();
+            var piece = board.getPiece(move.getStartPosition());
+            if (piece != null) {
+                var validMoves = piece.pieceMoves(board, move.getStartPosition());
+                if (validMoves.contains(move)) {
+                    return board.isLegalMove(move);
+                }
+            }
+        }
+        return false;
     }
 
     // Print function helpers
