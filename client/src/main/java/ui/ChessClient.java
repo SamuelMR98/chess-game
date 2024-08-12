@@ -113,7 +113,82 @@ public class ChessClient implements DisplayHandler {
         return "Failed to create game";
     }
 
+    // Print function helpers
+    private void printGame() {
+        var color = state == State.BLACK ? ChessGame.TeamColor.BLACK : ChessGame.TeamColor.WHITE;
+        printGame(color, null);
+    }
+    private void printGame(ChessGame.TeamColor color, Collection<ChessPosition> highlights) {
+        System.out.println("\n");
+        System.out.print((gameData.game().getBoard()).toString(color, highlights));
+        System.out.println();
+    }
+    @Override
+    public void updateBoard(GameData newGameData) {
+        gameData = newGameData;
+        printGame();
+        printPrompt();
+
+        if (isGameOver()) {
+            userState = State.LOGGED_IN;
+            printPrompt();
+            gameData = null;
+        }
+    }
+    @Override
+    public void message(String message) {
+        System.out.println();
+        System.out.println(SET_TEXT_COLOR_MAGENTA + "NOTIFY: " + message);
+        printPrompt();
+    }
+
+    @Override
+    public void error(String message) {
+        System.out.println();
+        System.out.println(SET_TEXT_COLOR_RED + "NOTIFY: " + message);
+        printPrompt();
+
+    }
+
+    /**
+     * Help commands and it's color and description
+     */
     private record Help(String cmd, String description) {}
+
+    private final List<Help> loggedOutHelp = List.of(
+            new Help("register <USERNAME> <PASSWORD> <EMAIL>", "to create an account"),
+            new Help("login <USERNAME> <PASSWORD>", "to play chess"),
+            new Help("quit", "playing chess"),
+            new Help("help", "with possible commands")
+    );
+
+    static final List<Help> loggedInHelp = List.of(
+            new Help("create <NAME>", "a game"),
+            new Help("list", "games"),
+            new Help("join <ID> [WHITE|BLACK]", "a game"),
+            new Help("observe <ID>", "a game"),
+            new Help("logout", "when you are done"),
+            new Help("quit", "playing chess"),
+            new Help("help", "with possible commands")
+    );
+
+    static final List<Help> observingHelp = List.of(
+            new Help("legal", "moves for the current board"),
+            new Help("redraw", "the board"),
+            new Help("leave", "the game"),
+            new Help("quit", "playing chess"),
+            new Help("help", "with possible commands")
+    );
+
+    static final List<Help> playingHelp = List.of(
+            new Help("redraw", "the board"),
+            new Help("leave", "the game"),
+            new Help("move <crcr> [q|r|b|n]", "a piece with optional promotion"),
+            new Help("resign", "the game without leaving it"),
+            new Help("legal <cr>", "moves a given piece"),
+            new Help("quit", "playing chess"),
+            new Help("help", "with possible commands")
+    );
 
     private String getHelp(List<Help> help) {
         var sb = new StringBuilder();
