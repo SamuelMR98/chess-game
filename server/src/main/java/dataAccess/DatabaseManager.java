@@ -1,9 +1,9 @@
-package dataaccess;
+package dataAccess;
 
 import java.sql.*;
 import java.util.Properties;
 
-public class DbManager {
+public class DatabaseManager {
     private static final String DB_NAME;
     private static final String USER;
     private static final String PASSWORD;

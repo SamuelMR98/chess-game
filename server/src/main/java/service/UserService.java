@@ -1,14 +1,13 @@
 package service;
 
-import dataaccess.DataAccess;
-import dataaccess.DataAccessException;
+import dataAccess.DataAccess;
+import dataAccess.DataAccessException;
 import model.AuthData;
 import model.UserData;
 
 import spark.utils.StringUtils;
 import util.CodedException;
 
-import java.lang.Object;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class UserService {

@@ -1,4 +1,4 @@
-package dataaccess;
+package dataAccess;
 
 import model.*;
 import chess.ChessGame;
@@ -30,7 +30,7 @@ public class MySqlDataAccess implements DataAccess {
     }
 
     public UserData readUser(String username) throws DataAccessException {
-        try (var conn = DbManager.getConnection()) {
+        try (var conn = DatabaseManager.getConnection()) {
             try (var stmt = conn.prepareStatement("SELECT password, email from `user` WHERE username = ?")) {
                 stmt.setString(1, username);
                 try (var rs = stmt.executeQuery()) {
@@ -54,7 +54,7 @@ public class MySqlDataAccess implements DataAccess {
     }
 
     public AuthData readAuth(String token) throws DataAccessException {
-        try (var conn = DbManager.getConnection()) {
+        try (var conn = DatabaseManager.getConnection()) {
             try (var stmt = conn.prepareStatement("SELECT username from `authentication` WHERE authToken=?")) {
                 stmt.setString(1, token);
                 try (var rs = stmt.executeQuery()) {
@@ -96,7 +96,7 @@ public class MySqlDataAccess implements DataAccess {
     }
 
     public GameData readGame(int gameID) throws DataAccessException {
-        try (var conn = DbManager.getConnection()) {
+        try (var conn = DatabaseManager.getConnection()) {
             try (var stmt = conn.prepareStatement("SELECT gameID, gameName, whitePlayerName, blackPlayerName, game, state FROM `game` WHERE gameID=?")) {
                 stmt.setInt(1, gameID);
                 try (var rs = stmt.executeQuery()) {
@@ -113,7 +113,7 @@ public class MySqlDataAccess implements DataAccess {
 
     public Collection<GameData> listGames() throws DataAccessException {
         var games = new ArrayList<GameData>();
-        try (var conn = DbManager.getConnection()) {
+        try (var conn = DatabaseManager.getConnection()) {
             try (var stmt = conn.prepareStatement("SELECT gameID, gameName, whitePlayerName, blackPlayerName, game, state FROM `game`")) {
                 try (var rs = stmt.executeQuery()) {
                     while (rs.next()) {
@@ -171,8 +171,8 @@ public class MySqlDataAccess implements DataAccess {
 
     private void configureDB() throws DataAccessException {
         try {
-            DbManager.createDatabase();
-            try (var conn = DbManager.getConnection()) {
+            DatabaseManager.createDatabase();
+            try (var conn = DatabaseManager.getConnection()) {
                 for (var stmt : creteStatements) {
                     try (var preparedStatement = conn.prepareStatement(stmt)) {
                         preparedStatement.executeUpdate();
@@ -185,7 +185,7 @@ public class MySqlDataAccess implements DataAccess {
     }
 
     private void executeCmd(String cmd) throws DataAccessException {
-        try (var conn = DbManager.getConnection()) {
+        try (var conn = DatabaseManager.getConnection()) {
             try (var stmt = conn.prepareStatement(cmd)) {
                 stmt.executeUpdate();
             }
@@ -195,7 +195,7 @@ public class MySqlDataAccess implements DataAccess {
     }
 
     private int executeUpdate(String cmd, Object... args) throws DataAccessException {
-        try (var conn = DbManager.getConnection()) {
+        try (var conn = DatabaseManager.getConnection()) {
             try (var stmt = conn.prepareStatement(cmd, RETURN_GENERATED_KEYS)) {
                 for (int i = 0; i < args.length; i++) {
                     var param = args[i];

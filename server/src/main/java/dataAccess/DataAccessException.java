@@ -1,4 +1,4 @@
-package dataaccess;
+package dataAccess;
 
 /**
  * Represents an exception that occurs when accessing data

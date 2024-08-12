@@ -1,8 +1,8 @@
 package service;
 
 import chess.ChessGame;
-import dataaccess.DataAccess;
-import dataaccess.DataAccessException;
+import dataAccess.DataAccess;
+import dataAccess.DataAccessException;
 import model.GameData;
 import util.CodedException;
 

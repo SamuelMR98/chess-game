@@ -2,10 +2,9 @@ package server;
 
 import util.StringUtil;
 
-import dataaccess.*;
+import dataAccess.*;
 import model.*;
 import chess.*;
-import util.StringUtil;
 import com.google.gson.Gson;
 
 import org.eclipse.jetty.websocket.api.*;
