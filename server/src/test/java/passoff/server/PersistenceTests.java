@@ -45,7 +45,8 @@ public class PersistenceTests {
         var token = regResult.getAuthToken();
 
         // Create game
-        var createRequest = new TestCreateGame(token, "Test Game");
+        var createRequest = new TestCreateRequest("Test Game");
+        var createResult = serverFacade.createGame(createRequest, token);
 
         // join game
         TestJoinRequest joinRequest = new TestJoinRequest(ChessGame.TeamColor.WHITE, createResult.getGameID());
@@ -67,7 +68,7 @@ public class PersistenceTests {
         Assertions.assertEquals("ExistingUser", game1.getWhiteUsername(), "White player does not match");
         Assertions.assertEquals(game1.getGameID(), createResult.getGameID(), "Game ID does not match");
         
-        TestLoginRequest loginRequest = new TestLoginRequest("ExistingUser", "password");
+        var loginRequest = new TestUser(registerRequest.getUsername(), registerRequest.getPassword());
         serverFacade.login(loginRequest);
         Assertions.assertEquals(200, serverFacade.getStatusCode(), "Server response code was not 200 OK");
     }
