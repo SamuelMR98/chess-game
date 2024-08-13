@@ -22,6 +22,10 @@ public class ChessGame {
         this.board = new ChessBoard();
     }
 
+    public ChessGame create (String serializedGame) {
+        return new Gson().fromJson(serializedGame, ChessGame.class);
+    }
+
     /**
      * @return Which team's turn it is
      */

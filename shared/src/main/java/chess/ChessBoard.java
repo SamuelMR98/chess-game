@@ -47,31 +47,26 @@ public class ChessBoard {
      * (How the game of chess normally starts)
      */
     public void resetBoard() {
-        board = new ChessPiece[8][8];
-        for (int i = 0; i < 8; i++) {
-            board[6][i] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN);
+        var pieces = new ChessPiece.PieceType[]{
+                ChessPiece.PieceType.ROOK,
+                ChessPiece.PieceType.KNIGHT,
+                ChessPiece.PieceType.BISHOP,
+                ChessPiece.PieceType.QUEEN,
+                ChessPiece.PieceType.KING,
+                ChessPiece.PieceType.BISHOP,
+                ChessPiece.PieceType.KNIGHT,
+                ChessPiece.PieceType.ROOK
+        };
+        for (var i = 0; i < 8; i++) {
+            board[0][i] = new ChessPiece(ChessGame.TeamColor.WHITE, pieces[i]);
             board[1][i] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
+            board[2][i] = null;
+            board[3][i] = null;
+            board[4][i] = null;
+            board[5][i] = null;
+            board[6][i] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN);
+            board[7][i] = new ChessPiece(ChessGame.TeamColor.BLACK, pieces[i]);
         }
-        board[0][0] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.ROOK);
-        board[0][7] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.ROOK);
-        board[7][0] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.ROOK);
-        board[7][7] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.ROOK);
-
-        board[0][1] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.KNIGHT);
-        board[0][6] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.KNIGHT);
-        board[7][1] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KNIGHT);
-        board[7][6] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KNIGHT);
-
-        board[0][2] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.BISHOP);
-        board[0][5] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.BISHOP);
-        board[7][2] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.BISHOP);
-        board[7][5] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.BISHOP);
-
-        board[0][3] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.QUEEN);
-        board[7][3] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.QUEEN);
-
-        board[0][4] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.KING);
-        board[7][4] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KING);
     }
 
     /**
@@ -138,8 +133,8 @@ public class ChessBoard {
      *
      */
     public void enPassant(ChessMove move) {
-        var passantRow = move.getStartPosition().getRow() == 6 ? 5 : 4;
-        var passantPosition = new ChessPosition(passantRow, move.getStartPosition().getColumn());
+        var passantRow = move.getEndPosition().getRow() == 6 ? 5 : 4;
+        var passantPosition = new ChessPosition(passantRow, move.getEndPosition().getColumn());
 
         removePiece(passantPosition);
     }
@@ -278,10 +273,6 @@ public class ChessBoard {
      * @return true if castling move is valid, false otherwise
      */
     public boolean isValidCastling(ChessPiece piece, ChessMove move) {
-        if (piece.getPieceType() != ChessPiece.PieceType.KING) {
-            return false;
-        }
-
         var color = piece.getTeamColor();
         var teamRow = color == ChessGame.TeamColor.BLACK ? 8 : 1;
 
