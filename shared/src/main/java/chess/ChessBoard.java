@@ -1,9 +1,6 @@
 package chess;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.ArrayList;
-import java.util.Map;
+import java.util.*;
 
 /**
  * A chessboard that can hold and rearrange chess pieces.
@@ -14,6 +11,7 @@ import java.util.Map;
 public class ChessBoard {
 
     private ChessPiece[][] board = new ChessPiece[8][8];
+    final public ArrayList<ChessMove> history = new ArrayList<>();
 
     public ChessBoard() {
     }
@@ -131,7 +129,7 @@ public class ChessBoard {
         removePiece(move.getStartPosition());
         addPiece(move.getEndPosition(), piece);
 
-        //history.add(move);
+        history.add(move);
     }
 
     /**
@@ -232,13 +230,32 @@ public class ChessBoard {
         return attackingPieces;
     }
 
+    public List<ChessMove> getHistory() {
+        return history;
+    }
+
     /**
      * Checks if square is empty
-     * @param position
+     * @param row row of square
+     * @param col column of square
      * @return true if square is empty, false otherwise
      */
-    public boolean isSquareEmpty(ChessPosition position) {
-        return getPiece(position) == null;
+    public boolean isSquareEmpty(int row, int col) {
+        var pieceAt = getPiece(new ChessPosition(row, col));
+        return pieceAt == null;
+    }
+
+    public ChessMove getLastMove() {
+        return history.get(history.size() - 1);
+    }
+
+    public boolean isOriginalPosition(ChessPosition pos) {
+        for (var bh : getHistory()) {
+            if (bh.getStartPosition().equals(pos)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**

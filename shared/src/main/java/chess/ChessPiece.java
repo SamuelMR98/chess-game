@@ -498,8 +498,9 @@ public class ChessPiece {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ChessPiece that)) return false;
-        return pieceColor == that.pieceColor && type == that.type;
+        if (o == null || getClass() != o.getClass()) return false;
+        ChessPiece piece = (ChessPiece) o;
+        return pieceColor == piece.pieceColor && type == piece.type;
     }
 
     @Override
@@ -509,13 +510,6 @@ public class ChessPiece {
 
     @Override
     public String toString() {
-        return switch (type) {
-            case KING -> pieceColor == ChessGame.TeamColor.WHITE ? "♔" : "♚";
-            case QUEEN -> pieceColor == ChessGame.TeamColor.WHITE ? "♕" : "♛";
-            case BISHOP -> pieceColor == ChessGame.TeamColor.WHITE ? "♗" : "♝";
-            case KNIGHT -> pieceColor == ChessGame.TeamColor.WHITE ? "♘" : "♞";
-            case ROOK -> pieceColor == ChessGame.TeamColor.WHITE ? "♖" : "♜";
-            case PAWN -> pieceColor == ChessGame.TeamColor.WHITE ? "♙" : "♟";
-        };
+        return String.format("%s %s", type, pieceColor);
     }
 }
