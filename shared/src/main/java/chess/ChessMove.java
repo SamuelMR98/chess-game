@@ -75,21 +75,20 @@ public class ChessMove {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ChessMove chessMove)) return false;
-        return Objects.equals(getStartPosition(), chessMove.getStartPosition()) && Objects.equals(getEndPosition(), chessMove.getEndPosition()) && getPromotionPiece() == chessMove.getPromotionPiece();
+        if (o == null || getClass() != o.getClass()) return false;
+        ChessMove move = (ChessMove) o;
+        return (startPosition.equals(move.startPosition) && endPosition.equals(move.endPosition) && promotionPiece == move.promotionPiece);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getStartPosition(), getEndPosition(), getPromotionPiece());
+        var promotionCode = (promotionPiece == null ? 9 : promotionPiece.ordinal());
+        return (1000 * startPosition.hashCode()) + endPosition.hashCode() + promotionCode;
     }
 
     @Override
     public String toString() {
-        return "ChessMove{" +
-                "startPosition=" + startPosition +
-                ", endPosition=" + endPosition +
-                ", promotionPiece=" + promotionPiece +
-                '}';
+        var p = (promotionPiece == null ? "" : ":" + promotionPiece);
+        return String.format("%s:%s%s", startPosition.toString(), endPosition.toString(), p);
     }
 }
