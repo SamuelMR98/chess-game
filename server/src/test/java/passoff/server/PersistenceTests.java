@@ -1,8 +1,7 @@
 package passoff.server;
 
 import org.junit.jupiter.api.*;
-import passoff.exception.TestException;
-import passoff.server.TestServerFacade;
+import passoff.model.*;
 import server.Server;
 
 import java.sql.Connection;
@@ -38,6 +37,37 @@ public class PersistenceTests {
     public void persistenceTest() throws TestException {
         var initialRowCount = getDbRowCount();
 
+        TestUser registerRequest = new TestUser("ExistingUser", "password", "existing@byu.edu");
+
+        TestAuthResult regResult = serverFacade.register(registerRequest);
+        var token = regResult.getAuthToken();
+
+        // Create game
+        var createRequest = new TestCreateGame(token, "Test Game");
+
+        // join game
+        TestJoinRequest joinRequest = new TestJoinRequest(ChessGame.TeamColor,WHITE, createResult.getGameID());
+        serverFacade.joinPlayer(joinRequest, token);
+
+        var newRowCount = getDbRowCount();
+        Assertions.assertTrue(initialRowCount < newRowCount, "Database row count did not increase");
+
+        // Test that the user can be retrieved after server restart
+        teardown();
+        startServer();
+    
+        TestListResult listResult = serverFacade.listGames(token);
+        Assertions.assertEquals(200, serverFacade.getStatusCode(), "Server response code was not 200 OK");
+        Assertions.assertEquals(1, listResult.games.length, "Missing game(s) in database after restart");
+
+        TestListEntry game1 = listResult.games[0];
+        Assertions.assertEquals("Test Game", game1.getGameName(), "Game name does not match");
+        Assertions.assertEquals("ExistingUser", game1.getWhitePlayer(), "White player does not match");
+        Assertions.assertEquals(game1.getGameID(), createResult.getGameID(), "Game ID does not match");
+        
+        TestLoginRequest loginRequest = new TestLoginRequest("ExistingUser", "password");
+        serverFacade.login(loginRequest);
+        Assertions.assertEquals(200, serverFacade.getStatusCode(), "Server response code was not 200 OK");
     }
 
     private int getDbRowCount() throws TestException {
