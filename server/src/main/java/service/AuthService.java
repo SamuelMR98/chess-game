@@ -17,6 +17,8 @@ public class AuthService {
         this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
+
+
     /**
      * Create a new session for a user
      * @param user the user to create a session for
