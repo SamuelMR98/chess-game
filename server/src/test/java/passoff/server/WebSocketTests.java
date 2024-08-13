@@ -3,12 +3,12 @@ package passoff.server;
 import chess.ChessGame;
 import chess.ChessMove;
 import chess.ChessPosition;
+import server.Server;
 
 import passoff.model.*;
 import passoff.server.*;
 import passoff.websocket.WebsocketTestingEnvironment;
-import passoff.*;
-import passoff.TestUtilities;
+import passoff.exception.TestException;
 
 import java.net.URISyntaxException;
 import java.util.List;
@@ -16,6 +16,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import org.junit.jupiter.api.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class WebSocketTests {
@@ -45,7 +47,7 @@ public class WebSocketTests {
         serverFacade = new TestServerFacade("localhost", port);
         serverFacade.clear();
 
-        environment = new WebSocketTestingEnvironment("localhost", port, "/connect");
+        environment = new WebsocketTestingEnvironment("localhost", port, "/connect");
 
         waitTime = TestUtilities.getMessageTime();
     }
@@ -100,7 +102,7 @@ public class WebSocketTests {
 
         Map<String, List<Message>> messages = joinPlayer(whiteUser.username, whiteUser.authToken, createResult.getGameID(), ChessGame.TeamColor.WHITE, Set.of(), Set.of());
 
-        assertErrorMessage(messages.get(whiteUser.username))
+        assertErrorMessage(messages.get(whiteUser.username));
     }
 
     @Test
