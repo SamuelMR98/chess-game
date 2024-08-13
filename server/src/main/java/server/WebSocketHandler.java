@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
+@WebSocket
 public class WebSocketHandler {
     private final DataAccess dataAccess;
 

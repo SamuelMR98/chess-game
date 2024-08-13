@@ -77,6 +77,7 @@ public class Server {
         gameService = new GameService(dataAccess);
         adminService = new AdminService(dataAccess);
         authService = new AuthService(dataAccess);
+        webSocketHandler = new WebSocketHandler(dataAccess);
     }
 
     private Object errorHandler(CodedException e, Request req, Response res) {
