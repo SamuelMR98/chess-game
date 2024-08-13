@@ -46,7 +46,7 @@ public class WebSocketTests {
         System.out.println("Test Server started on port " + port);
 
         serverFacade = new TestServerFacade("localhost", port);
-        serverFacade.clear();ga
+        serverFacade.clear();
 
         environment = new WebsocketTestingEnvironment("localhost", port, "/connect", null);
 
