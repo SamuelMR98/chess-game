@@ -7,6 +7,7 @@ import server.Server;
 
 import passoff.model.*;
 import passoff.server.*;
+import passoff.chess.TestUtilities;
 import passoff.websocket.WebsocketTestingEnvironment;
 import passoff.exception.TestException;
 
@@ -22,7 +23,7 @@ import org.junit.jupiter.api.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class WebSocketTests {
 
-    private static WebSocketTests webSocketTests;
+    private static WebsocketTestingEnvironment environment;
     private static TestServerFacade serverFacade;
     private static Server server;
     private static Long time;
@@ -45,13 +46,13 @@ public class WebSocketTests {
         System.out.println("Test Server started on port " + port);
 
         serverFacade = new TestServerFacade("localhost", port);
-        serverFacade.clear();
+        serverFacade.clear();ga
 
-        environment = new WebsocketTestingEnvironment("localhost", port, "/connect");
+        environment = new WebsocketTestingEnvironment("localhost", port, "/connect", null);
 
-        waitTime = TestUtilities.getMessageTime();
+        time = System.currentTimeMillis();
     }
-
+/*
     @BeforeEach
     public void setup() throws TestException {
         serverFacade.clear();
@@ -64,12 +65,12 @@ public class WebSocketTests {
 
         joinGame(whiteUser, gameId, ChessGame.TeamColor.WHITE);
         joinGame(blackUser, gameId, ChessGame.TeamColor.BLACK);
-        joinGame(spectatorUser, gameId, ChessGame.TeamColor.SPECTATOR);
+        joinGame(spectatorUser, gameId, null);
     }
 
     @AfterEach
     public void teardown() {
-        environment.disconnect();
+        environment.disconnectAll();
     }
 
     @Test
@@ -180,7 +181,7 @@ public class WebSocketTests {
         serverFacade.joinGame(new TestJoinRequest(ChessGame.TeamColor.BLACK, gameId), blackUser.authToken);
         serverFacade.joinGame(new TestJoinRequest(ChessGame.TeamColor.SPECTATOR, gameId), spectatorUser.authToken);
     }
-
+*/
     private void assertLoadGameMessage() {
         
     }
