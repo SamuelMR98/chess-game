@@ -6,18 +6,14 @@ import model.AuthData;
 import model.UserData;
 import util.CodedException;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class AuthService {
     private final DataAccess dataAccess;
-    private final BCryptPasswordEncoder passwordEncoder;
 
     public AuthService(DataAccess dataAccess) {
         this.dataAccess = dataAccess;
-        this.passwordEncoder = new BCryptPasswordEncoder();
     }
-
-
 
     /**
      * Create a new session for a user
@@ -29,7 +25,7 @@ public class AuthService {
         try {
             UserData existingUser = dataAccess.readUser(user.username());
             if (existingUser != null) {
-                if (passwordEncoder.matches(user.password(), existingUser.password())) {
+                if (BCrypt.checkpw(user.password(), existingUser.password())) {
                     return dataAccess.writeAuth(user.username());
                 }
             }

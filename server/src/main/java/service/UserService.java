@@ -8,15 +8,13 @@ import model.UserData;
 import spark.utils.StringUtils;
 import util.CodedException;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class UserService {
     final private DataAccess dataAccess;
-    final private BCryptPasswordEncoder passwordEncoder;
 
     public UserService(DataAccess dataAccess) {
         this.dataAccess = dataAccess;
-        this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
     /**
@@ -31,7 +29,7 @@ public class UserService {
         }
 
         try {
-            var hashedPassword = passwordEncoder.encode(user.password());
+            var hashedPassword = BCrypt.hashpw(user.password(), BCrypt.gensalt());
             var newUser = new UserData(user.username(), hashedPassword, user.email());
 
             newUser = dataAccess.writeUser(newUser);
