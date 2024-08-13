@@ -2,6 +2,8 @@ package passoff.server;
 
 import org.junit.jupiter.api.*;
 import passoff.model.*;
+import passoff.exception.TestException;
+import chess.ChessGame;
 import server.Server;
 
 import java.sql.Connection;
@@ -46,7 +48,7 @@ public class PersistenceTests {
         var createRequest = new TestCreateGame(token, "Test Game");
 
         // join game
-        TestJoinRequest joinRequest = new TestJoinRequest(ChessGame.TeamColor,WHITE, createResult.getGameID());
+        TestJoinRequest joinRequest = new TestJoinRequest(ChessGame.TeamColor.WHITE, createResult.getGameID());
         serverFacade.joinPlayer(joinRequest, token);
 
         var newRowCount = getDbRowCount();
@@ -58,11 +60,11 @@ public class PersistenceTests {
     
         TestListResult listResult = serverFacade.listGames(token);
         Assertions.assertEquals(200, serverFacade.getStatusCode(), "Server response code was not 200 OK");
-        Assertions.assertEquals(1, listResult.games.length, "Missing game(s) in database after restart");
+        Assertions.assertEquals(1, listResult.getGames().length, "Missing game(s) in database after restart");
 
-        TestListEntry game1 = listResult.games[0];
+        TestListEntry game1 = listResult.getGames()[0];
         Assertions.assertEquals("Test Game", game1.getGameName(), "Game name does not match");
-        Assertions.assertEquals("ExistingUser", game1.getWhitePlayer(), "White player does not match");
+        Assertions.assertEquals("ExistingUser", game1.getWhiteUsername(), "White player does not match");
         Assertions.assertEquals(game1.getGameID(), createResult.getGameID(), "Game ID does not match");
         
         TestLoginRequest loginRequest = new TestLoginRequest("ExistingUser", "password");
