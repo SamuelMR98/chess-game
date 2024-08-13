@@ -175,5 +175,22 @@ public class WebSocketTests {
         
     }
 
+    private void setUpNormalGame() {
+        serverFacade.joinGame(new TestJoinRequest(ChessGame.TeamColor.WHITE, gameId), whiteUser.authToken);
+        serverFacade.joinGame(new TestJoinRequest(ChessGame.TeamColor.BLACK, gameId), blackUser.authToken);
+        serverFacade.joinGame(new TestJoinRequest(ChessGame.TeamColor.SPECTATOR, gameId), spectatorUser.authToken);
+    }
 
+    private void assertLoadGameMessage() {
+        
+    }
+
+    private void assertNotificationMessage() {
+        
+    }
+
+    private void assertErrorMessage() {
+        
+    }
 }
+
