@@ -6,7 +6,7 @@ import chess.ChessPosition;
 
 import passoff.model.*;
 import passoff.server.*;
-import passoff.WebSocketTestingEnvironment;
+import passoff.websocket.WebsocketTestingEnvironment;
 import passoff.*;
 import passoff.TestUtilities;
 
