@@ -14,10 +14,12 @@ public class ChessBoard {
     final public ArrayList<ChessMove> history = new ArrayList<>();
 
     public ChessBoard() {
+        //resetBoard();
     }
+
     public ChessBoard(ChessBoard copy) {
         for (var i = 0; i < 8; i++) {
-            System.arraycopy(copy.board[i], 0, board[i], 0, 8);
+            System.arraycopy(copy.board[i], 0, this.board[i], 0, 8);
         }
     }
 
@@ -129,7 +131,7 @@ public class ChessBoard {
 
     /**
      * En passant move
-     * @param move
+     * @param move  The move to make
      *
      */
     public void enPassant(ChessMove move) {
@@ -141,7 +143,7 @@ public class ChessBoard {
 
     /**
      * Castling move
-     * @param move
+     * @param move The move to make
      */
     public void castle(ChessMove move) {
         var row = move.getEndPosition().getRow();
@@ -179,8 +181,8 @@ public class ChessBoard {
 
     /**
      * Checks if a piece is being attacked
-     * @param position
-     * @param teamColor
+     * @param position position of piece
+     * @param teamColor color of team
      * @return
      */
     public boolean isAttacked(ChessPosition position, ChessGame.TeamColor teamColor) {
@@ -204,8 +206,8 @@ public class ChessBoard {
     }
     /**
      * Gets the attacking pieces
-     * @param position
-     * @param teamColor
+     * @param position position of piece
+     * @param teamColor color of team
      * @return Collection of attacking pieces
      */
     public Collection<ChessPosition> getAttackingPieces(ChessPosition position, ChessGame.TeamColor teamColor) {
@@ -255,8 +257,8 @@ public class ChessBoard {
 
     /**
      * Checks if a move is castling
-     * @param piece
-     * @param move
+     * @param piece the piece to move
+     * @param move the move to make
      * @return true if move is castling, false otherwise
      */
     public boolean isCastling(ChessPiece piece, ChessMove move) {
@@ -268,8 +270,8 @@ public class ChessBoard {
 
     /**
      * Checks if a castling move is valid
-     * @param piece
-     * @param move
+     * @param piece the piece to move
+     * @param move the move to make
      * @return true if castling move is valid, false otherwise
      */
     public boolean isValidCastling(ChessPiece piece, ChessMove move) {
@@ -291,9 +293,9 @@ public class ChessBoard {
 
     /**
      * Checks if a position is not attacked
-     * @param row
-     * @param col
-     * @param color
+     * @param row row
+     * @param col column
+     * @param color color of team
      * @return true if position is not attacked, false otherwise
      */
     private boolean positionNotAttacked(int row, int col, ChessGame.TeamColor color) {
