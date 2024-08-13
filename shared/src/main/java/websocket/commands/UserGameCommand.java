@@ -1,4 +1,4 @@
-package webSocketMessages.userCommands;
+package websocket.commands;
 
 import java.util.Objects;
 
@@ -11,8 +11,7 @@ public class UserGameCommand {
     }
 
     public enum CommandType {
-        JOIN_PLAYER,
-        JOIN_OBSERVER,
+        CONNECT,
         MAKE_MOVE,
         LEAVE,
         RESIGN

@@ -9,8 +9,8 @@ import com.google.gson.Gson;
 
 import org.eclipse.jetty.websocket.api.*;
 import org.eclipse.jetty.websocket.api.annotations.*;
-import webSocketMessages.serverMessages.*;
-import webSocketMessages.userCommands.*;
+import websocket.messages.*;
+import websocket.commands.*;
 
 import static chess.ChessGame.TeamColor.BLACK;
 import static chess.ChessGame.TeamColor.WHITE;
@@ -123,8 +123,7 @@ public class WebSocketHandler {
             var connection = getConnection(command.getAuthString(), session);
             if (connection != null) {
                 switch (command.getCommandType()) {
-                    case JOIN_PLAYER -> join(connection, readJson(message, JoinPlayerCommand.class));
-                    case JOIN_OBSERVER -> observe(connection, command);
+                    case CONNECT -> join(connection, readJson(message, JoinPlayerCommand.class));
                     case MAKE_MOVE -> move(connection, readJson(message, MoveCommand.class));
                     case LEAVE -> leave(connection, command);
                     case RESIGN -> resign(connection, command);

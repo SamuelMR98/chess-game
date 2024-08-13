@@ -4,10 +4,10 @@ import chess.*;
 import model.GameData;
 import util.ExceptionUtil;
 import util.ResponseException;
-import webSocketMessages.userCommands.GameCommand;
-import webSocketMessages.userCommands.JoinPlayerCommand;
-import webSocketMessages.userCommands.MoveCommand;
-import webSocketMessages.userCommands.UserGameCommand;
+import websocket.commands.GameCommand;
+import websocket.commands.JoinPlayerCommand;
+import websocket.commands.MoveCommand;
+import websocket.commands.UserGameCommand;
 
 import java.io.IOException;
 import java.util.ArrayList;

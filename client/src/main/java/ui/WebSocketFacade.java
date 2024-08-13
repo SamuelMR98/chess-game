@@ -1,11 +1,11 @@
 package ui;
 
 import com.google.gson.Gson;
-import webSocketMessages.serverMessages.ErrorMessage;
-import webSocketMessages.serverMessages.LoadMessage;
-import webSocketMessages.serverMessages.NotificationMessage;
-import webSocketMessages.serverMessages.ServerMessage;
-import webSocketMessages.userCommands.GameCommand;
+import websocket.messages.ErrorMessage;
+import websocket.messages.LoadMessage;
+import websocket.messages.NotificationMessage;
+import websocket.messages.ServerMessage;
+import websocket.commands.GameCommand;
 
 import javax.websocket.*;
 import java.io.IOException;
