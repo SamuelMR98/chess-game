@@ -1,17 +1,11 @@
-package serviceTests;
+package service;
 
 import dataAccess.MemoryDataAccess;
 import jdk.jfr.Description;
 import org.junit.jupiter.api.Test;
-import service.AuthService;
 
-import service.UserService;
 import util.CodedException;
-import dataAccess.DataAccess;
-import dataAccess.DataAccessException;
-import model.AuthData;
 import model.UserData;
-import org.mindrot.jbcrypt.BCrypt;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 

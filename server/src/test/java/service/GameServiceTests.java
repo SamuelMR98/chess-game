@@ -1,4 +1,4 @@
-package serviceTests;
+package service;
 
 import chess.ChessGame;
 import dataAccess.DataAccess;
@@ -6,9 +6,7 @@ import dataAccess.DataAccessException;
 import dataAccess.MemoryDataAccess;
 import jdk.jfr.Description;
 import model.GameData;
-import model.UserData;
 import org.junit.jupiter.api.Test;
-import service.GameService;
 import util.CodedException;
 
 import java.util.Collection;

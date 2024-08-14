@@ -1,14 +1,10 @@
-package serviceTests;
+package service;
 
 import dataAccess.MemoryDataAccess;
 import jdk.jfr.Description;
 import model.UserData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import service.AdminService;
-import service.AuthService;
-import service.GameService;
-import service.UserService;
 import util.CodedException;
 
 public class AdminServiceTests {

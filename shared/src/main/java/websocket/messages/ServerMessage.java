@@ -2,7 +2,7 @@ package websocket.messages;
 
 import java.util.Objects;
 public class ServerMessage {
-    ServerMessageType type;
+    ServerMessageType serverMessageType;
 
     public enum ServerMessageType {
         LOAD_GAME,
@@ -11,11 +11,11 @@ public class ServerMessage {
     }
 
     public ServerMessage(ServerMessageType type) {
-        this.type = type;
+        this.serverMessageType = type;
     }
 
     public ServerMessageType getType() {
-        return this.type;
+        return this.serverMessageType;
     }
 
     @Override
@@ -23,7 +23,7 @@ public class ServerMessage {
         if (this == o) return true;
         if (!(o instanceof ServerMessage)) return false;
         ServerMessage that = (ServerMessage) o;
-        return getType() == that.type;
+        return getType() == that.serverMessageType;
     }
 
     @Override
