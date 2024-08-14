@@ -85,7 +85,7 @@ public class GameServiceTests {
             @Override
             public GameData readGame(int gameID) {
                 // Simulate a game where the white color is already taken
-                return new GameData(gameID, "Chess Game", "user2", null, game1, GameData.State.UNDECIDED);
+                return new GameData(1, "user1", null, "Chess Game", game1, GameData.State.UNDECIDED);
             }
 
             @Override
