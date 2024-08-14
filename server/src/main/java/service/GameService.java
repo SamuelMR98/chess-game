@@ -53,7 +53,7 @@ public class GameService {
             if (gameData == null) {
                 throw new CodedException(400, "Unknown game");
             } else if (color == null) {
-                return gameData;
+                throw new CodedException(400, "Missing color");
             } else if (gameData.isGameOver()) {
                 throw new CodedException(403, "Game is over");
             } else {
