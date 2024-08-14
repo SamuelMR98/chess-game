@@ -1,6 +1,7 @@
 package serviceTests;
 
 import dataAccess.MemoryDataAccess;
+import jdk.jfr.Description;
 import model.UserData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -12,6 +13,7 @@ import util.CodedException;
 
 public class AdminServiceTests {
     @Test
+    @Description("Positive test case for clearing the database")
     public void clearDatabaseTest() throws CodedException {
         var memDataAccess = new MemoryDataAccess();
         var userService = new UserService(memDataAccess);

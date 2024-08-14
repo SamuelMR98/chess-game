@@ -161,7 +161,7 @@ public class ChessClient implements DisplayHandler {
                 var gameId = Integer.parseInt(params[0]);
                 var gameData = server.joinGame(token, gameId, null);
                 state = State.OBSERVING;
-                webSocket.sendCommand(new GameCommand(UserGameCommand.CommandType.JOIN_OBSERVER, token, gameId));
+                webSocket.sendCommand(new GameCommand(UserGameCommand.CommandType.CONNECT, token, gameId));
                 return String.format("Observing game %d", gameData.gameID());
             }
         }

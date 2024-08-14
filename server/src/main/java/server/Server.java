@@ -5,10 +5,12 @@ import dataAccess.MySqlDataAccess;
 import util.CodedException;
 import model.*;
 import service.*;
+import server.JoinRequest;
 import spark.*;
 
 import java.util.*;
 import java.util.logging.Logger;
+import java.nio.file.Paths;
 
 import static spark.Spark.webSocket;
 
@@ -99,6 +101,7 @@ public class Server {
      * @return the response body
      * @throws CodedException if there is an error clearing the database
      */
+    // Endpoint for [DELETE] /db [200]{} [500]{"message": "Error: (description of error)"}
     private Object clearApplication(Request req, Response res) throws CodedException {
         adminService.clear();
         return send();
@@ -111,6 +114,8 @@ public class Server {
      * @return the response body
      * @throws CodedException if there is an error registering the user
      */
+    // Endpoint for [POST] /user - Register User - Body: { "username":"", "password":"", "email":"" }
+    // [200]{"username":"", "authToken":""} [400]{"message": "Missing required fields"}
     private Object registerUser(Request req, Response res) throws CodedException {
         var user = getBody(req, UserData.class);
         var auth = userService.registerUser(user);
@@ -177,10 +182,12 @@ public class Server {
      * @return the response body
      * @throws CodedException if there is an error joining the game
      */
+    // Endpoint for [PUT] /game - Join Game - Body: { "color":"", "gameId":"" }
+    // [200]{} [400]{"message": "Missing body"} [401]{"message": "Unauthorized"} [403]{"message": "Already taken"} [500]{"message": "Server error"}
     public Object joinGame(Request req, Response res) throws CodedException {
         var token = unauthorized(req);
         var joinRequest = getBody(req, JoinRequest.class);
-        gameService.joinGame(token.username(), joinRequest.color(), joinRequest.gameId());
+        var gameData = gameService.joinGame(token.username(), joinRequest.color(), joinRequest.gameId());
         return send();
     }
 

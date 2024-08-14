@@ -86,4 +86,5 @@ public interface DataAccess {
      * @throws DataAccessException
      */
     Collection<GameData> listGames() throws DataAccessException;
+
 }

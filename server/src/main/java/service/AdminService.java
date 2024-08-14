@@ -19,6 +19,7 @@ public class AdminService {
      *
      * @throws CodedException if there is an error clearing the data
      */
+    // Endpoint for [DELETE] /db [200]{} [500]{"message": "Error: (description of error)"}
     public void clear() throws CodedException {
         try {
             dataAccess.clear();
