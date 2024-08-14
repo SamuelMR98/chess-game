@@ -2,15 +2,15 @@ package server;
 
 import com.google.gson.Gson;
 import dataAccess.MySqlDataAccess;
-import util.CodedException;
 import model.*;
 import service.*;
-import server.JoinRequest;
 import spark.*;
+import util.CodedException;
 
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.logging.Logger;
-import java.nio.file.Paths;
+
 
 import static spark.Spark.webSocket;
 
@@ -41,7 +41,6 @@ public class Server {
             Spark.get("/game", this::listGames);
             Spark.post("/game", this::createGame);
             Spark.put("/game", this::joinGame);
-
             Spark.afterAfter(this::log);
 
             Spark.exception(CodedException.class, this::errorHandler);
@@ -187,7 +186,7 @@ public class Server {
     public Object joinGame(Request req, Response res) throws CodedException {
         var token = unauthorized(req);
         var joinRequest = getBody(req, JoinRequest.class);
-        var gameData = gameService.joinGame(token.username(), joinRequest.color(), joinRequest.gameId());
+        var gameData = gameService.joinGame(token.username(), joinRequest.playerColor(), joinRequest.gameID());
         return send();
     }
 

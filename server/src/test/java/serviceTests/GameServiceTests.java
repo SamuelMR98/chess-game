@@ -2,9 +2,11 @@ package serviceTests;
 
 import chess.ChessGame;
 import dataAccess.DataAccess;
+import dataAccess.DataAccessException;
 import dataAccess.MemoryDataAccess;
 import jdk.jfr.Description;
 import model.GameData;
+import model.UserData;
 import org.junit.jupiter.api.Test;
 import service.GameService;
 import util.CodedException;
@@ -78,28 +80,18 @@ public class GameServiceTests {
     }
 
     @Test
-    public void testJoinGame_ColorAlreadyTaken() {
-        DataAccess dataAccess = new MemoryDataAccess() {
+    public void testJoinGame_ColorAlreadyTaken() throws DataAccessException, CodedException {
 
-            ChessGame game1 = new ChessGame();
-            @Override
-            public GameData readGame(int gameID) {
-                // Simulate a game where the white color is already taken
-                return new GameData(1, "user1", null, "Chess Game", game1, GameData.State.UNDECIDED);
-            }
-
-            @Override
-            public void updateGame(GameData gameData) {
-                // No action needed for this test
-            }
-
-            // Other methods can be left unimplemented for this test
-        };
+        var dataAccess = new MemoryDataAccess();
+        dataAccess.writeUser(new UserData("user1", "password", "email"));
+        dataAccess.writeUser(new UserData("user2", "password", "email"));
+        dataAccess.newGame("Game1");
 
         GameService gameService = new GameService(dataAccess);
+        gameService.joinGame("user1", ChessGame.TeamColor.WHITE, 1);
 
         CodedException exception = assertThrows(CodedException.class, () -> {
-            gameService.joinGame("user1", ChessGame.TeamColor.WHITE, 1);
+            gameService.joinGame("user2", ChessGame.TeamColor.WHITE, 1);
         });
 
         assertEquals(403, exception.getStatusCode());

@@ -20,7 +20,7 @@ public class GameService {
     /**
      * List all games
      * @return a collection of all games
-     * @throws CodedException
+     * @throws CodedException if there is an error accessing the data
      */
     public Collection<GameData> listGames() throws CodedException{
         try {
@@ -34,7 +34,7 @@ public class GameService {
      * Create a new game
      * @param gameName the name of the game
      * @return the new game
-     * @throws CodedException
+     * @throws CodedException if there is an error accessing the data
      */
     public GameData createGame(String gameName) throws CodedException {
         try {
@@ -49,6 +49,7 @@ public class GameService {
     public GameData joinGame(String username, ChessGame.TeamColor color, int gameID) throws CodedException {
         try {
             var gameData = dataAccess.readGame(gameID);
+            System.out.println(gameData);
             if (gameData == null) {
                 throw new CodedException(400, "Unknown game");
             } else if (color == null) {
