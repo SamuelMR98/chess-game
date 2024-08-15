@@ -30,6 +30,15 @@ public class ServerFacade {
     }
 
     // Endpoints for the server in the client
+
+    /**
+     * Register a new user
+     * @param username the user's username
+     * @param password the user's password
+     * @param email the user's email
+     * @return the user's auth data
+     * @throws ResponseException if the request fails
+     */
     public AuthData register(String username, String password, String email) throws ResponseException {
         var req = Map.of(
             "username", username,
@@ -39,6 +48,13 @@ public class ServerFacade {
         return this.makeRequest("POST", "/user", req, null, AuthData.class);
     }
 
+    /**
+     * Login a user
+     * @param username the user's username
+     * @param password the user's password
+     * @return the user's auth data
+     * @throws ResponseException if the request fails
+     */
     public AuthData login(String username, String password) throws ResponseException {
         var req = Map.of(
             "username", username,
@@ -47,14 +63,30 @@ public class ServerFacade {
         return this.makeRequest("POST", "/session", req, null, AuthData.class);
     }
 
+    /**
+     * Logout a user
+     * @param token the user's token
+     * @throws ResponseException if the request fails
+     */
     public void logout(String token) throws ResponseException {
         this.makeRequest("DELETE", "/session", null, token, null);
     }
 
+    /**
+     * Clear all data from the server
+     * @throws ResponseException if the request fails
+     */
     public void clear() throws ResponseException {
         this.makeRequest("DELETE", "/db", null, null, Map.class);
     }
 
+    /**
+     * Create a new game
+     * @param token the user's token
+     * @param gameName the name of the game
+     * @return the game
+     * @throws ResponseException if the request fails
+     */
     public GameData createGame(String token, String gameName) throws ResponseException {
         var req = Map.of(
             "gameName", gameName
@@ -62,18 +94,39 @@ public class ServerFacade {
         return this.makeRequest("POST", "/game", req, token, GameData.class);
     }
 
+    /**
+     * Join a game
+     * @param token the user's token
+     * @param gameId the game's ID
+     * @param color the color to join as
+     * @return the game
+     * @throws ResponseException if the request fails
+     */
     public GameData joinGame(String token, int gameId, ChessGame.TeamColor color) throws ResponseException {
         var req = new JoinRequest(color, gameId);
         this.makeRequest("PUT", "/game", req, token, GameData.class);
         return  getGame(token, gameId);
     }
 
+    /**
+     * List all games
+     * @param token the user's token
+     * @return the list of games
+     * @throws ResponseException if the request fails
+     */
     public GameData[] listGames(String token) throws ResponseException {
         record Response(GameData[] games) {}
         var res = this.makeRequest("GET", "/game", null, token, Response.class);
         return (res != null ? res.games : new GameData[0]);
     }
 
+    /**
+     * Get a game by its ID
+     * @param token the user's token
+     * @param gameId the game's ID
+     * @return the game
+     * @throws ResponseException if the game is not found
+     */
     private GameData getGame(String token, int gameId) throws ResponseException {
         var games = listGames(token);
         for (var game : games) {
