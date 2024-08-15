@@ -23,10 +23,10 @@ public record GameData (int gameID, String whiteUsername, String blackUsername, 
         return new GameData(this.gameID, this.whiteUsername, username, this.gameName, this.game, this.state);
     }
 
-
+    /*
     public GameData clearBoard() {
         return new GameData(this.gameID, this.whiteUsername, this.blackUsername, this.gameName, null, this.state);
-    }
+    }*/
 
     public GameData setState(State state) {
         return new GameData(this.gameID, this.whiteUsername, this.blackUsername, this.gameName, this.game, state);

@@ -33,20 +33,18 @@ public class ChessClient implements DisplayHandler {
         webSocket = new WebSocketFacade(hostname, this);
     }
 
-    public void clear() throws Exception {
+    /*public void clear() throws Exception {
         server.clear();
-    }
+    }*/
 
-    private String clear(String[] ignored) throws Exception {
+    /*private String clear(String[] ignored) throws Exception {
         clear();
         state = State.LOGGED_OUT;
         gameData = null;
         return "Cleared";
-    }
+    }*/
 
-    private String quit(String[] ignored) {
-        return "Quitting";
-    }
+    //private String quit(String[] ignored) {return "Quitting";}
 
     public String eval(String input) {
         var message = "Error with command. Try: Help";
@@ -78,7 +76,7 @@ public class ChessClient implements DisplayHandler {
         };
     }
 
-    private String login(String[] params) throws ResponseException {
+    /*private String login(String[] params) throws ResponseException {
         if (state == State.LOGGED_OUT && params.length == 2) {
             var res = server.login(params[0], params[1]);
             token = res.authToken();
@@ -151,8 +149,9 @@ public class ChessClient implements DisplayHandler {
         }
 
         return "Failed to join game";
-    }
+    }*/
 
+    /*
     private String observe(String[] params) throws ResponseException, IOException {
         verifyAuth();
 
@@ -166,8 +165,9 @@ public class ChessClient implements DisplayHandler {
             }
         }
         return "Failed to observe game";
-    }
+    }*/
 
+    /*
     private String redraw(String[] ignored) throws Exception {
         verifyAuth();
 
@@ -176,8 +176,9 @@ public class ChessClient implements DisplayHandler {
             return "";
         }
         return "Failed to redraw";
-    }
+    }*/
 
+    /*
     private String legal(String[] params) throws Exception {
         verifyAuth();
 
@@ -195,8 +196,9 @@ public class ChessClient implements DisplayHandler {
             }
         }
         return "Failed to get legal moves";
-    }
+    }*/
 
+    /*
     String move(String[] params) throws Exception {
         verifyAuth();
 
@@ -210,8 +212,9 @@ public class ChessClient implements DisplayHandler {
             }
         }
         return "Failed to move";
-    }
+    }*/
 
+    /*
     private String leave(String[] ignored) throws Exception {
         if (isPlaying() || isObserving()) {
             state = State.LOGGED_IN;
@@ -220,8 +223,9 @@ public class ChessClient implements DisplayHandler {
             return "Left game";
         }
         return "Failed to leave game";
-    }
+    }*/
 
+    /*
     private String resign(String[] ignored) throws Exception {
         if (isPlaying()) {
             webSocket.sendCommand(new GameCommand(UserGameCommand.CommandType.RESIGN, token, gameData.gameID()));
@@ -230,7 +234,7 @@ public class ChessClient implements DisplayHandler {
             return "Resigned";
         }
         return "Failed to resign";
-    }
+    }*/
 
     public boolean isMoveLegal(ChessMove move) {
         if (isTurn()) {
