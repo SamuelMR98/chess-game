@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class AuthServiceTests {
     @Test
     @Description("Positive test case for creating a session")
-    public void testCreateSession_Success() throws CodedException {
+    public void testCreateSessionSuccess() throws CodedException {
         var memDataAccess = new MemoryDataAccess();
         var userService = new UserService(memDataAccess);
         var user = new UserData("John Doe", "J0hnD03", "jdoe@byu.edu");
@@ -27,7 +27,7 @@ public class AuthServiceTests {
 
     @Test
     @Description("Negative test case for creating a session with an invalid password")
-    public void testCreateSession_InvalidPassword() {
+    public void testCreateSessionInvalidPassword() {
         var memDataAccess = new MemoryDataAccess();
         var authService = new AuthService(memDataAccess);
         var user = new UserData("John Doe", "J0hnD03", "jdoe@byu.edu");
@@ -40,7 +40,7 @@ public class AuthServiceTests {
 
     @Test
     @Description("Negative test case for creating a session with an invalid username")
-    public void testCreateSession_InvalidUsername() throws CodedException {
+    public void testCreateSessionInvalidUsername() throws CodedException {
         var memDataAccess = new MemoryDataAccess();
         var authService = new AuthService(memDataAccess);
         var user = new UserData("John Doe", "J0hnD03", "jdoe@byu.edu");
@@ -50,7 +50,7 @@ public class AuthServiceTests {
 
     @Test
     @Description("Positive test case for deleting a session")
-    public void testDeleteSession_Success() throws CodedException {
+    public void testDeleteSessionSuccess() throws CodedException {
         var memDataAccess = new MemoryDataAccess();
         var userService = new UserService(memDataAccess);
         var user = new UserData("John Doe", "J0hnD03", "jdoe@byu.edu");
@@ -68,7 +68,7 @@ public class AuthServiceTests {
 
     @Test
     @Description("Negative test case for deleting a session with an invalid token")
-    public void testDeleteSession_InvalidToken() throws CodedException {
+    public void testDeleteSessionInvalidToken() throws CodedException {
         var memDataAccess = new MemoryDataAccess();
         var userService = new UserService(memDataAccess);
         var user = new UserData("John Doe", "J0hnD03", "jdoe@byu.edu");

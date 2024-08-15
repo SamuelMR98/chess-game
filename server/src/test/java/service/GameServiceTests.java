@@ -18,7 +18,7 @@ public class GameServiceTests {
 
     @Test
     @Description("Positive test case for listing games")
-    public void testListGames_Success() throws CodedException {
+    public void testListGamesSuccess() throws CodedException {
 
         ChessGame game1 = new ChessGame();
         ChessGame game2 = new ChessGame();
@@ -43,7 +43,7 @@ public class GameServiceTests {
 
     @Test
     @Description("Positive test case for creating a game")
-    public void testCreateGame_Success() throws CodedException {
+    public void testCreateGameSuccess() throws CodedException {
         ChessGame game1 = new ChessGame();
         var dataAccess = new MemoryDataAccess();
 
@@ -57,7 +57,7 @@ public class GameServiceTests {
 
     @Test
     @Description("Negative test case for joining a game with an unknown game")
-    public void testJoinGame_UnknownGame() {
+    public void testJoinGameUnknownGame() {
         DataAccess dataAccess = new MemoryDataAccess() {
             @Override
             public GameData readGame(int gameID) {
@@ -78,7 +78,7 @@ public class GameServiceTests {
     }
 
     @Test
-    public void testJoinGame_ColorAlreadyTaken() throws DataAccessException, CodedException {
+    public void testJoinGameColorAlreadyTaken() throws DataAccessException, CodedException {
         ChessGame game1 = new ChessGame();
         var dataAccess = new MemoryDataAccess() {
             @Override
