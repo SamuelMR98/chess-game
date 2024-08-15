@@ -1,7 +1,7 @@
 package service;
 
-import dataAccess.DataAccess;
-import dataAccess.DataAccessException;
+import dataaccess.DataAccess;
+import dataaccess.DataAccessException;
 import util.CodedException;
 
 /**

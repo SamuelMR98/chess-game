@@ -1,13 +1,12 @@
 package server;
 
 import com.google.gson.Gson;
-import dataAccess.MySqlDataAccess;
+import dataaccess.MySqlDataAccess;
 import model.*;
 import service.*;
 import spark.*;
 import util.CodedException;
 
-import java.nio.file.Paths;
 import java.util.*;
 import java.util.logging.Logger;
 

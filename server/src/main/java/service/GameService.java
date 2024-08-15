@@ -1,14 +1,12 @@
 package service;
 
 import chess.ChessGame;
-import dataAccess.DataAccess;
-import dataAccess.DataAccessException;
-import model.AuthData;
+import dataaccess.DataAccess;
+import dataaccess.DataAccessException;
 import model.GameData;
 import util.CodedException;
 
 import java.util.Collection;
-import java.util.Objects;
 
 public class GameService {
     private final DataAccess dataAccess;
@@ -49,7 +47,7 @@ public class GameService {
     public GameData joinGame(String username, ChessGame.TeamColor color, int gameID) throws CodedException {
         try {
             var gameData = dataAccess.readGame(gameID);
-            System.out.println(gameData);
+            //System.out.println(gameData);
             if (gameData == null) {
                 throw new CodedException(400, "Unknown game");
             } else if (color == null) {

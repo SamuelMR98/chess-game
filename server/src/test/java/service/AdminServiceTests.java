@@ -1,6 +1,6 @@
 package service;
 
-import dataAccess.MemoryDataAccess;
+import dataaccess.MemoryDataAccess;
 import jdk.jfr.Description;
 import model.UserData;
 import org.junit.jupiter.api.Assertions;

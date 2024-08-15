@@ -2,7 +2,7 @@ package server;
 
 import util.StringUtil;
 
-import dataAccess.*;
+import dataaccess.*;
 import model.*;
 import chess.*;
 import com.google.gson.Gson;
