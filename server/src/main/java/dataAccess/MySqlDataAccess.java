@@ -199,9 +199,13 @@ public class MySqlDataAccess implements DataAccess {
             try (var stmt = conn.prepareStatement(cmd, RETURN_GENERATED_KEYS)) {
                 for (int i = 0; i < args.length; i++) {
                     var param = args[i];
-                    if (param instanceof String p) stmt.setString(i + 1, p);
-                    else if (param instanceof Integer p) stmt.setInt(i + 1, p);
-                    else if (param == null) stmt.setNull(i + 1, NULL);
+                    if (param instanceof String p) {
+                        stmt.setString(i + 1, p);
+                    } else if (param instanceof Integer p) {
+                        stmt.setInt(i + 1, p);
+                    } else if (param == null) {
+                        stmt.setNull(i + 1, NULL);
+                    }
                 }
                 stmt.executeUpdate();
                 try (var rs = stmt.getGeneratedKeys()) {

@@ -201,12 +201,18 @@ public class ChessGame {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         var game = (ChessGame) o;
 
-        if (!Objects.equals(board, game.board)) return false;
+        if (!Objects.equals(board, game.board)) {
+            return false;
+        }
         return teamTurn == game.teamTurn;
     }
 
