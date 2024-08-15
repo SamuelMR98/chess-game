@@ -151,7 +151,8 @@ public class WebSocketHandler {
                 var loadMsg = (new LoadMessage(gameData)).toString();
                 connection.send(loadMsg);
 
-                var notificationMsg = (new NotificationMessage(String.format("%s joined %s as %s", connection.user.username(), gameData.gameName(), command.teamColor))).toString();
+                var notificationMsg = (new NotificationMessage(String.format("%s joined %s as %s", connection.user.username(),
+                        gameData.gameName(), command.teamColor))).toString();
                 connections.broadcast(gameData.gameID(), connection.user.username(), notificationMsg);
             } else {
                 connection.sendError("player has not joined game");
@@ -191,7 +192,8 @@ public class WebSocketHandler {
             if (!gameData.isGameOver()) {
                 if (isTurn(gameData, command.move, connection.user.username())) {
                     gameData.game().makeMove(command.move);
-                    var notificationMsg = (new NotificationMessage(String.format("%s moved %s", connection.user.username(), command.move))).toString();
+                    var notificationMsg = (new NotificationMessage(String.format("%s moved %s",
+                            connection.user.username(), command.move))).toString();
                     connections.broadcast(gameData.gameID(), connection.user.username(), notificationMsg);
 
                     gameData = handleGameState(gameData);

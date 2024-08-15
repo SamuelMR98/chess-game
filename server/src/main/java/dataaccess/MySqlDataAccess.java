@@ -78,7 +78,8 @@ public class MySqlDataAccess implements DataAccess {
         var game = new ChessGame();
         game.getBoard().resetBoard();
         var state = GameData.State.UNDECIDED;
-        var gameID = executeUpdate("INSERT INTO `game` (gameName, whitePlayerName, blackPlayerName, game, state) VALUES (?, ?, ?, ?, ?)", gameName, null, null, game.toString(), state.toString());
+        var gameID = executeUpdate("INSERT INTO `game` (gameName, whitePlayerName, blackPlayerName, game, state) VALUES (?, ?, ?, ?, ?)",
+                gameName, null, null, game.toString(), state.toString());
         if (gameID != 0) {
             return new GameData(gameID, null, null, gameName, game, state);
         }
@@ -97,7 +98,8 @@ public class MySqlDataAccess implements DataAccess {
 
     public GameData readGame(int gameID) throws DataAccessException {
         try (var conn = DatabaseManager.getConnection()) {
-            try (var stmt = conn.prepareStatement("SELECT gameID, gameName, whitePlayerName, blackPlayerName, game, state FROM `game` WHERE gameID=?")) {
+            try (var stmt = conn.prepareStatement(
+                    "SELECT gameID, gameName, whitePlayerName, blackPlayerName, game, state FROM `game` WHERE gameID=?")) {
                 stmt.setInt(1, gameID);
                 try (var rs = stmt.executeQuery()) {
                     if (rs.next()) {
