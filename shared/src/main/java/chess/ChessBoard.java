@@ -350,7 +350,7 @@ public class ChessBoard {
     private static final String BLACK_PIECE = color(RED);
     private static final String WHITE_PIECE = color(GREEN);
 
-    private static final Map<ChessPiece.PieceType, String> pieceMap = Map.of(
+    private static final Map<ChessPiece.PieceType, String> PIECE_MAP = Map.of(
             ChessPiece.PieceType.KING, "K",
             ChessPiece.PieceType.QUEEN, "Q",
             ChessPiece.PieceType.BISHOP, "B",
@@ -388,7 +388,7 @@ public class ChessBoard {
                     var piece = board[i][j];
                     if (piece != null) {
                         var color = (piece.getTeamColor() == ChessGame.TeamColor.WHITE) ? WHITE_PIECE : BLACK_PIECE;
-                        var p = pieceMap.get(piece.getPieceType());
+                        var p = PIECE_MAP.get(piece.getPieceType());
                         sb.append(squareColor).append(color).append(" ").append(p).append(" ").append(COLOR_RESET);
                     } else {
                         sb.append(squareColor).append("   ").append(COLOR_RESET);

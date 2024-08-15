@@ -21,7 +21,7 @@ public class Server {
     AuthService authService;
     WebSocketHandler webSocketHandler;
 
-    public static final Logger log = Logger.getLogger("Chess Server");
+    public static final Logger LOG = Logger.getLogger("Chess Server");
     public int run(int desiredPort) {
         try {
             loadServices();

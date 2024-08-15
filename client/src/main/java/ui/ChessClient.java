@@ -71,9 +71,9 @@ public class ChessClient implements DisplayHandler {
 
     private String help(String[] ingnored) {
         return switch (state) {
-            case LOGGED_IN -> getHelp(loggedInHelp);
-            case OBSERVING -> getHelp(observingHelp);
-            case BLACK, WHITE -> getHelp(playingHelp);
+            case LOGGED_IN -> getHelp(LOGGED_IN_HELP);
+            case OBSERVING -> getHelp(OBSERVING_HELP);
+            case BLACK, WHITE -> getHelp(PLAYING_HELP);
             default -> getHelp(loggedOutHelp);
         };
     }
@@ -327,7 +327,7 @@ public class ChessClient implements DisplayHandler {
             new Help("help", "with possible commands")
     );
 
-    static final List<Help> loggedInHelp = List.of(
+    static final List<Help> LOGGED_IN_HELP = List.of(
             new Help("create <NAME>", "a game"),
             new Help("list", "games"),
             new Help("join <ID> [WHITE|BLACK]", "a game"),
@@ -337,7 +337,7 @@ public class ChessClient implements DisplayHandler {
             new Help("help", "with possible commands")
     );
 
-    static final List<Help> observingHelp = List.of(
+    static final List<Help> OBSERVING_HELP = List.of(
             new Help("legal", "moves for the current board"),
             new Help("redraw", "the board"),
             new Help("leave", "the game"),
@@ -345,7 +345,7 @@ public class ChessClient implements DisplayHandler {
             new Help("help", "with possible commands")
     );
 
-    static final List<Help> playingHelp = List.of(
+    static final List<Help> PLAYING_HELP = List.of(
             new Help("redraw", "the board"),
             new Help("leave", "the game"),
             new Help("move <crcr> [q|r|b|n]", "a piece with optional promotion"),
