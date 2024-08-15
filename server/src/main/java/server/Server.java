@@ -199,6 +199,10 @@ public class Server {
     }
 
     private String send(Object... props) {
+        return getString(props);
+    }
+
+    public static String getString(Object[] props) {
         Map<Object, Object> map = new HashMap<>();
         for (var i = 0; i + 1 < props.length; i = i + 2) {
             map.put(props[i], props[i + 1]);
