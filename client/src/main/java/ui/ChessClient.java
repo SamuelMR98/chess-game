@@ -125,7 +125,8 @@ public class ChessClient implements DisplayHandler {
         StringBuilder sb = new StringBuilder();
         for (var i = 0; i < games.length; i++) {
             var game = games[i];
-            sb.append(String.format("%d. %s white:%s black:%s state: %s%n", i, game.gameName(), game.whiteUsername(), game.blackUsername(), game.state()));
+            sb.append(String.format("%d. %s white:%s black:%s state:
+            %s%n", i, game.gameName(), game.whiteUsername(), game.blackUsername(), game.state()));
         }
         return sb.toString();
     }
@@ -362,7 +363,8 @@ public class ChessClient implements DisplayHandler {
     private String getHelp(List<Help> help) {
         var sb = new StringBuilder();
         for (var h : help) {
-            sb.append(String.format("  %s%s%s - %s%s%s%n", SET_TEXT_COLOR_BLUE, h.cmd, RESET_TEXT_COLOR, SET_TEXT_COLOR_MAGENTA, h.description, RESET_TEXT_COLOR));
+            sb.append(String.format("  %s%s%s - %s%s%s%n",
+                    SET_TEXT_COLOR_BLUE, h.cmd, RESET_TEXT_COLOR, SET_TEXT_COLOR_MAGENTA, h.description, RESET_TEXT_COLOR));
         }
         return sb.toString();
     }

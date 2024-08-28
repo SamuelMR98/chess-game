@@ -213,6 +213,11 @@ public class WebSocketHandler {
         }
     }
 
+    @OnWebSocketError
+    public void onError(Session session, Throwable error) {
+        error.printStackTrace();
+    }
+
     /**
      * function to resign
      * @param connection the connection
