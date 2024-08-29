@@ -34,7 +34,7 @@ public class WebSocketFacade extends Endpoint {
                     switch (serverMessage.getType()) {
                         case LOAD_GAME -> displayHandler.updateBoard(gson.fromJson(message, LoadMessage.class).game);
                         case ERROR -> displayHandler.error(gson.fromJson(message, ErrorMessage.class).errorMessage);
-                        case NOTIFICATION -> displayHandler.message(gson.fromJson(message, NotificationMessage.class).notification);
+                        case NOTIFICATION -> displayHandler.message(gson.fromJson(message, NotificationMessage.class).message);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
