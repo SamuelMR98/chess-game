@@ -17,8 +17,8 @@ public class DataAccessTests {
 
     @ParameterizedTest
     @ValueSource(classes = {MySqlDataAccess.class, MemoryDataAccess.class})
-    @DisplayName("Write and Read User")
-    public void writeReadUser(Class<? extends DataAccess> databaseClass) throws Exception {
+    @DisplayName("Positive Test: Write and Read User")
+    public void writeReadUser_Positive(Class<? extends DataAccess> databaseClass) throws Exception {
         DataAccess dataAccess = startDataBase(databaseClass);
         var user = new UserData("John Doe", "password", "jdoe@byu.edu");
 
@@ -32,6 +32,13 @@ public class DataAccessTests {
         Assertions.assertEquals(user.username(), readUser.username());
         Assertions.assertEquals(user.password(), readUser.password());
         Assertions.assertEquals(user.email(), readUser.email());
+    }
+
+    @ParameterizedTest
+    @ValueSource(classes = {MySqlDataAccess.class, MemoryDataAccess.class})
+    @DisplayName("Negative Test: Read Non-Existent User")
+    public void writeReadUser_Negative(Class<? extends DataAccess> databaseClass) throws Exception {
+        DataAccess dataAccess = startDataBase(databaseClass);
 
         // Negative test: Read non-existent user
         var nonExistentUser = dataAccess.readUser("nonExistentUser");
@@ -40,8 +47,8 @@ public class DataAccessTests {
 
     @ParameterizedTest
     @ValueSource(classes = {MySqlDataAccess.class, MemoryDataAccess.class})
-    @DisplayName("Write and Read Auth")
-    public void writeReadAuth(Class<? extends DataAccess> databaseClass) throws Exception {
+    @DisplayName("Positive Test: Write and Read Auth")
+    public void writeReadAuth_Positive(Class<? extends DataAccess> databaseClass) throws Exception {
         DataAccess dataAccess = startDataBase(databaseClass);
         var user = new UserData("John Doe", "password", "jdoe@byu.edu");
 
@@ -55,6 +62,13 @@ public class DataAccessTests {
         Assertions.assertNotNull(returnedAuth);
         Assertions.assertEquals(auth.authToken(), returnedAuth.authToken());
         Assertions.assertEquals(user.username(), returnedAuth.username());
+    }
+
+    @ParameterizedTest
+    @ValueSource(classes = {MySqlDataAccess.class, MemoryDataAccess.class})
+    @DisplayName("Negative Test: Read Non-Existent Auth Token")
+    public void writeReadAuth_Negative(Class<? extends DataAccess> databaseClass) throws Exception {
+        DataAccess dataAccess = startDataBase(databaseClass);
 
         // Negative test: Read non-existent auth token
         var nonExistentAuth = dataAccess.readAuth("invalidToken");
@@ -63,8 +77,8 @@ public class DataAccessTests {
 
     @ParameterizedTest
     @ValueSource(classes = {MySqlDataAccess.class, MemoryDataAccess.class})
-    @DisplayName("Delete Auth")
-    public void deleteAuth(Class<? extends DataAccess> databaseClass) throws Exception {
+    @DisplayName("Positive Test: Delete Auth")
+    public void deleteAuth_Positive(Class<? extends DataAccess> databaseClass) throws Exception {
         DataAccess dataAccess = startDataBase(databaseClass);
         var user = new UserData("John Doe", "password", "jdoe@byu.edu");
 
@@ -75,6 +89,13 @@ public class DataAccessTests {
         dataAccess.deleteAuth(auth.authToken());
         var deletedAuth = dataAccess.readAuth(auth.authToken());
         Assertions.assertNull(deletedAuth);
+    }
+
+    @ParameterizedTest
+    @ValueSource(classes = {MySqlDataAccess.class, MemoryDataAccess.class})
+    @DisplayName("Negative Test: Delete Non-Existent Auth Token")
+    public void deleteAuth_Negative(Class<? extends DataAccess> databaseClass) throws Exception {
+        DataAccess dataAccess = startDataBase(databaseClass);
 
         // Negative test: Delete non-existent auth token
         dataAccess.deleteAuth("invalidToken");
@@ -83,9 +104,9 @@ public class DataAccessTests {
     }
 
     @ParameterizedTest
-    @DisplayName("Write and Read Game")
     @ValueSource(classes = {MySqlDataAccess.class, MemoryDataAccess.class})
-    public void writeReadGame(Class<? extends DataAccess> dbClass) throws Exception {
+    @DisplayName("Positive Test: Write and Read Game")
+    public void writeReadGame_Positive(Class<? extends DataAccess> dbClass) throws Exception {
         DataAccess db = startDataBase(dbClass);
 
         // Positive test: Write and read game
@@ -96,6 +117,13 @@ public class DataAccessTests {
         var retrievedGame = db.readGame(game.gameID());
         Assertions.assertNotNull(retrievedGame);
         Assertions.assertEquals(retrievedGame, updatedGame);
+    }
+
+    @ParameterizedTest
+    @ValueSource(classes = {MySqlDataAccess.class, MemoryDataAccess.class})
+    @DisplayName("Negative Test: Read Non-Existent Game")
+    public void writeReadGame_Negative(Class<? extends DataAccess> dbClass) throws Exception {
+        DataAccess db = startDataBase(dbClass);
 
         // Negative test: Read non-existent game
         var nonExistentGame = db.readGame(-1);
@@ -103,15 +131,22 @@ public class DataAccessTests {
     }
 
     @ParameterizedTest
-    @DisplayName("List Games")
     @ValueSource(classes = {MySqlDataAccess.class, MemoryDataAccess.class})
-    public void listGames(Class<? extends DataAccess> dbClass) throws Exception {
+    @DisplayName("Positive Test: List Games")
+    public void listGames_Positive(Class<? extends DataAccess> dbClass) throws Exception {
         DataAccess db = startDataBase(dbClass);
 
         // Positive test: List games
         var games = List.of(db.newGame("blitz"), db.newGame("fisher"), db.newGame("lightning"));
         var returnedGames = db.listGames();
         Assertions.assertIterableEquals(games, returnedGames);
+    }
+
+    @ParameterizedTest
+    @ValueSource(classes = {MySqlDataAccess.class, MemoryDataAccess.class})
+    @DisplayName("Negative Test: List Games When No Games Exist")
+    public void listGames_Negative(Class<? extends DataAccess> dbClass) throws Exception {
+        DataAccess db = startDataBase(dbClass);
 
         // Negative test: List games when no games exist
         db.clear(); // Clear database to ensure no games exist
