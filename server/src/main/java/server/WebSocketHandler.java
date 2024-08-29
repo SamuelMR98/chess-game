@@ -120,7 +120,9 @@ public class WebSocketHandler {
     public void onMessage(Session session, String message) throws Exception {
         try {
             var command = readJson(message, GameCommand.class);
+
             var connection = getConnection(command.getAuthString(), session);
+            System.out.println("Command: " + readJson(message, JoinPlayerCommand.class));
             if (connection != null) {
                 switch (command.getCommandType()) {
                     case CONNECT -> join(connection, readJson(message, JoinPlayerCommand.class));
@@ -143,7 +145,7 @@ public class WebSocketHandler {
      * @throws Exception if there is an error joining the game
      */
     private void join(Connection connection, JoinPlayerCommand command) throws Exception {
-        var gameData = dataAccess.readGame(command.gameId);
+        var gameData = dataAccess.readGame(command.gameID);
         if (gameData != null) {
             var expectedUsername = (command.teamColor == BLACK) ? gameData.blackUsername() : gameData.whiteUsername();
             if (StringUtil.isEqual(expectedUsername, connection.user.username())) {
@@ -168,7 +170,7 @@ public class WebSocketHandler {
      * @throws Exception
      */
     private void observe(Connection connection, GameCommand command) throws Exception {
-        var gameData = dataAccess.readGame(command.gameId);
+        var gameData = dataAccess.readGame(command.gameID);
         if (gameData != null) {
             connection.game = gameData;
             var loadMsg = (new LoadMessage(gameData)).toString();
@@ -187,7 +189,7 @@ public class WebSocketHandler {
      * @throws Exception if there is an error moving
      */
     private void move (Connection connection, MoveCommand command) throws Exception {
-        var gameData = dataAccess.readGame(command.gameId);
+        var gameData = dataAccess.readGame(command.gameID);
         if (gameData != null) {
             if (!gameData.isGameOver()) {
                 if (isTurn(gameData, command.move, connection.user.username())) {
@@ -225,7 +227,7 @@ public class WebSocketHandler {
      * @throws Exception if there is an error resigning
      */
     private void resign(Connection connection, GameCommand command) throws Exception {
-        var gameData = dataAccess.readGame(command.gameId);
+        var gameData = dataAccess.readGame(command.gameID);
         if (gameData != null && !gameData.isGameOver()) {
             var playerColor = getPlayerColor(gameData, connection.user.username());
             if (playerColor != null) {
@@ -251,7 +253,7 @@ public class WebSocketHandler {
      * @throws Exception if there is an error leaving the game
      */
     private void leave(Connection connection, GameCommand command) throws Exception {
-        var gameData = dataAccess.readGame(command.gameId);
+        var gameData = dataAccess.readGame(command.gameID);
         if (gameData != null) {
             if (StringUtil.isEqual(gameData.blackUsername(), connection.user.username())) {
                 gameData = gameData.setBlack(null);

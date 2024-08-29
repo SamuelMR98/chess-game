@@ -32,7 +32,7 @@ public class WebSocketFacade extends Endpoint {
                 try {
                     ServerMessage serverMessage = new Gson().fromJson(message, ServerMessage.class);
                     switch (serverMessage.getType()) {
-                        case LOAD_GAME -> displayHandler.updateBoard(gson.fromJson(message, LoadMessage.class).gameData);
+                        case LOAD_GAME -> displayHandler.updateBoard(gson.fromJson(message, LoadMessage.class).game);
                         case ERROR -> displayHandler.error(gson.fromJson(message, ErrorMessage.class).errorMessage);
                         case NOTIFICATION -> displayHandler.message(gson.fromJson(message, NotificationMessage.class).notification);
                     }
