@@ -161,8 +161,15 @@ public class WebSocketHandler {
                 var notificationMsg = (new NotificationMessage(String.format("%s joined %s as %s", connection.user.username(),
                         gameData.gameName(), command.teamColor))).toString();
                 connections.broadcast(gameData.gameID(), connection.user.username(), notificationMsg);
-            } else {
-                connection.sendError("player has not joined game");
+            }
+            // more players can join as observers
+            else {
+                connection.game = gameData;
+                var loadMsg = (new LoadMessage(gameData)).toString();
+                connection.send(loadMsg);
+
+                var notificationMsg = (new NotificationMessage(String.format("%s is observing the game", connection.user.username()))).toString();
+                connections.broadcast(gameData.gameID(), connection.user.username(), notificationMsg);
             }
         } else {
             connection.sendError("game not found");
