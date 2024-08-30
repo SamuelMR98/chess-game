@@ -17,7 +17,7 @@ public class WebSocketFacade extends Endpoint {
     DisplayHandler displayHandler;
 
     public WebSocketFacade(String serverName, DisplayHandler displayHandler) throws DeploymentException, IOException, URISyntaxException {
-        var url = String.format("ws://%s/connect", serverName);
+        var url = String.format("ws://%s/ws", serverName);
         URI socketURI = new URI(url);
         this.displayHandler = displayHandler;
 
