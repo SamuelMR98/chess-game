@@ -191,40 +191,20 @@ public class ChessClient implements DisplayHandler {
 
     private String legal(String[] params) throws Exception {
         verifyAuth();
-
-        // if isPlaying() require params.length == 1 (piece position)
-        if (isPlaying() && params.length == 1) {
-            var pos = new ChessPosition(params[0]);
-            var highlights = new ArrayList<ChessPosition>();
-            highlights.add(pos);
-            for (var move : gameData.game().validMoves(pos)) {
-                highlights.add(move.getEndPosition());
-            }
-            var color = state == State.BLACK ? ChessGame.TeamColor.BLACK : ChessGame.TeamColor.WHITE;
-            printGame(color, highlights);
-            return "";
-        }
-        // if isObserving() require params.length == 0 (all legal moves from player's whose turn it is)
-        if (isObserving() && params.length == 0) {
-            var highlights = new ArrayList<ChessPosition>();
-            var color = gameData.game().getTeamTurn();
-            var board = gameData.game().getBoard();
-            // traverse the board and find all legal moves for the current player
-            for (var row = 1; row <= 8; row++) {
-                for (var col = 1; col <= 8; col++) {
-                    var pos = new ChessPosition(row, col);
-                    var piece = board.getPiece(pos);
-                    if (piece != null && piece.getTeamColor() == color) {
-                        for (var move : piece.pieceMoves(board, pos)) {
-                            highlights.add(move.getEndPosition());
-                        }
-                    }
+        if (isPlaying() || isObserving()) {
+            if (params.length == 1) {
+                var pos = new ChessPosition(params[0]);
+                var highlights = new ArrayList<ChessPosition>();
+                highlights.add(pos);
+                for (var move : gameData.game().validMoves(pos)) {
+                    highlights.add(move.getEndPosition());
                 }
+                var color = state == State.BLACK ? ChessGame.TeamColor.BLACK : ChessGame.TeamColor.WHITE;
+                printGame(color, highlights);
+                return "";
             }
-            printGame(color, highlights);
-            return "";
         }
-        return "Failed to show legal moves";
+        return "Failure";
     }
 
     String move(String[] params) throws Exception {
