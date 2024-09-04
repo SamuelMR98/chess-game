@@ -148,7 +148,8 @@ public class WebSocketHandler {
 
         if (gameData != null) {
             // Check if the player is already in the game, both player data can already be in the game
-            var expectedUsername = StringUtil.isEqual(gameData.whiteUsername(), connection.user.username()) ? gameData.whiteUsername() : gameData.blackUsername();
+            var expectedUsername = StringUtil.isEqual(gameData.whiteUsername(), connection.user.username()) ?
+                    gameData.whiteUsername() : gameData.blackUsername();
             if (StringUtil.isEqual(expectedUsername, connection.user.username())) {
                 connection.game = gameData;
                 var loadMsg = (new LoadMessage(gameData)).toString();
@@ -171,28 +172,7 @@ public class WebSocketHandler {
             connection.sendError("game not found");
         }
     }
-    /**
-     * Handles a user observing a game command (This should infer that the user in not on the game as the white or black player)
-     * @param connection
-     * @param command
-     * @throws Exception
-     */
-    private void observe(Connection connection, GameCommand command) throws Exception {
-        // infer that the user is not in the game as the white or black player
-        // gameData is the game that the user is observing
-        var gameData = dataAccess.readGame(command.gameID);
 
-        if (gameData != null) {
-            connection.game = gameData;
-            var loadMsg = (new LoadMessage(gameData)).toString();
-            connection.send(loadMsg);
-
-            var notificationMsg = (new NotificationMessage(String.format("%s is observing the game", connection.user.username()))).toString();
-            connections.broadcast(gameData.gameID(), connection.user.username(), notificationMsg);
-        } else {
-            connection.sendError("game not found");
-        }
-    }
     /**
      * Handles the move command
      * @param connection the connection
