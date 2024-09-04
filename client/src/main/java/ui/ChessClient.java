@@ -113,7 +113,7 @@ public class ChessClient implements DisplayHandler {
 
         if (params.length == 1 && state == State.LOGGED_IN) {
             var gameData = server.createGame(token, params[0]);
-            return String.format("Created game %s", gameData.gameID());
+            return String.format("Created game %s", params[0]);
         }
         return "Failed to create game";
     }
@@ -126,7 +126,7 @@ public class ChessClient implements DisplayHandler {
         for (var i = 0; i < games.length; i++) {
             var game = games[i];
             sb.append(String.format("%d. %s white:%s black:%s state: %s%n",
-                    i, game.gameName(), game.whiteUsername(), game.blackUsername(), game.state()));
+                    i+1, game.gameName(), game.whiteUsername(), game.blackUsername(), game.state()));
         }
         return sb.toString();
     }
@@ -136,7 +136,7 @@ public class ChessClient implements DisplayHandler {
         games = server.listGames(token);
         if (state == State.LOGGED_IN) {
             if (params.length == 2 && (params[1].equalsIgnoreCase("WHITE") || params[1].equalsIgnoreCase("BLACK"))) {
-                var gamePosition = Integer.parseInt(params[0]);
+                var gamePosition = Integer.parseInt(params[0]) - 1;
                 if (games != null && gamePosition >= 0 && gamePosition < games.length) {
                     var gameId = games[gamePosition].gameID();
                     var color = ChessGame.TeamColor.valueOf(params[1].toUpperCase());
@@ -162,7 +162,7 @@ public class ChessClient implements DisplayHandler {
         games = server.listGames(token);
         if (state == State.LOGGED_IN) {
             if (params.length == 1) {
-                var gamePosition = Integer.parseInt(params[0]);
+                var gamePosition = Integer.parseInt(params[0]) - 1;
                 if (games != null && gamePosition >= 0 && gamePosition < games.length) {
                     var gameId = games[gamePosition].gameID();
                     state = State.OBSERVING;
@@ -235,10 +235,15 @@ public class ChessClient implements DisplayHandler {
 
     private String resign(String[] ignored) throws Exception {
         if (isPlaying()) {
-            webSocket.sendCommand(new GameCommand(UserGameCommand.CommandType.RESIGN, token, gameData.gameID()));
-            state = State.LOGGED_IN;
-            gameData = null;
-            return "Resigned";
+            System.out.println("Are you sure you want to resign? (y/n)");
+            var scanner = new java.util.Scanner(System.in);
+            var input = scanner.nextLine();
+            if (input.equalsIgnoreCase("y")) {
+                webSocket.sendCommand(new GameCommand(UserGameCommand.CommandType.RESIGN, token, gameData.gameID()));
+                return "Resigned";
+            } else {
+                System.out.println("Not ready to give up");
+            }
         }
         return "Failed to resign";
     }
@@ -304,12 +309,6 @@ public class ChessClient implements DisplayHandler {
         gameData = newGameData;
         printGame();
         printPrompt();
-
-        if (isGameOver()) {
-            state = State.LOGGED_IN;
-            printPrompt();
-            gameData = null;
-        }
     }
     @Override
     public void message(String message) {
