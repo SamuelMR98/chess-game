@@ -133,7 +133,7 @@ public class DataAccessTests {
     @ParameterizedTest
     @ValueSource(classes = {MySqlDataAccess.class, MemoryDataAccess.class})
     @DisplayName("Positive Test: List Games")
-    public void listGames_Positive(Class<? extends DataAccess> dbClass) throws Exception {
+    public void listGamesPositive(Class<? extends DataAccess> dbClass) throws Exception {
         DataAccess db = startDataBase(dbClass);
 
         // Positive test: List games
