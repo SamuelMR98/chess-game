@@ -120,8 +120,6 @@ public class WebSocketHandler {
     public void onMessage(Session session, String message) throws Exception {
         try {
             var command = readJson(message, GameCommand.class);
-            System.out.println("Command: " + command.getCommandType());
-            System.out.println("Message: " + message);
 
             var connection = getConnection(command.getAuthString(), session);
             if (connection != null) {
@@ -147,12 +145,10 @@ public class WebSocketHandler {
      */
     private void join(Connection connection, JoinPlayerCommand command) throws Exception {
         var gameData = dataAccess.readGame(command.gameID);
-        System.out.println("GameData: " + gameData);
+
         if (gameData != null) {
             // Check if the player is already in the game, both player data can already be in the game
             var expectedUsername = StringUtil.isEqual(gameData.whiteUsername(), connection.user.username()) ? gameData.whiteUsername() : gameData.blackUsername();
-            System.out.println("Expected Username: " + expectedUsername);
-            System.out.println("Connection Username: " + connection.user.username());
             if (StringUtil.isEqual(expectedUsername, connection.user.username())) {
                 connection.game = gameData;
                 var loadMsg = (new LoadMessage(gameData)).toString();
@@ -176,13 +172,16 @@ public class WebSocketHandler {
         }
     }
     /**
-     * Handles a user observing a game
+     * Handles a user observing a game command (This should infer that the user in not on the game as the white or black player)
      * @param connection
      * @param command
      * @throws Exception
      */
     private void observe(Connection connection, GameCommand command) throws Exception {
+        // infer that the user is not in the game as the white or black player
+        // gameData is the game that the user is observing
         var gameData = dataAccess.readGame(command.gameID);
+
         if (gameData != null) {
             connection.game = gameData;
             var loadMsg = (new LoadMessage(gameData)).toString();

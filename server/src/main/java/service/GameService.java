@@ -50,11 +50,12 @@ public class GameService {
             //System.out.println(gameData);
             if (gameData == null) {
                 throw new CodedException(400, "Unknown game");
-            } else if (color == null) {
-                throw new CodedException(400, "Missing color");
             } else if (gameData.isGameOver()) {
                 throw new CodedException(403, "Game is over");
-            } else {
+            } else if (color == null) {
+                throw new CodedException(400, "Missing color");
+            }
+            else {
                 if (color == ChessGame.TeamColor.WHITE) {
                     if (gameData.whiteUsername() == null || gameData.whiteUsername().equals(username)) {
                         gameData = gameData.setWhite(username);
