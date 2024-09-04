@@ -18,7 +18,7 @@ public class DataAccessTests {
     @ParameterizedTest
     @ValueSource(classes = {MySqlDataAccess.class, MemoryDataAccess.class})
     @DisplayName("Positive Test: Write and Read User")
-    public void writeReadUser_Positive(Class<? extends DataAccess> databaseClass) throws Exception {
+    public void writeReadUserPositive(Class<? extends DataAccess> databaseClass) throws Exception {
         DataAccess dataAccess = startDataBase(databaseClass);
         var user = new UserData("John Doe", "password", "jdoe@byu.edu");
 
@@ -37,7 +37,7 @@ public class DataAccessTests {
     @ParameterizedTest
     @ValueSource(classes = {MySqlDataAccess.class, MemoryDataAccess.class})
     @DisplayName("Negative Test: Read Non-Existent User")
-    public void writeReadUser_Negative(Class<? extends DataAccess> databaseClass) throws Exception {
+    public void writeReadUserNegative(Class<? extends DataAccess> databaseClass) throws Exception {
         DataAccess dataAccess = startDataBase(databaseClass);
 
         // Negative test: Read non-existent user
@@ -48,7 +48,7 @@ public class DataAccessTests {
     @ParameterizedTest
     @ValueSource(classes = {MySqlDataAccess.class, MemoryDataAccess.class})
     @DisplayName("Positive Test: Write and Read Auth")
-    public void writeReadAuth_Positive(Class<? extends DataAccess> databaseClass) throws Exception {
+    public void writeReadAuthPositive(Class<? extends DataAccess> databaseClass) throws Exception {
         DataAccess dataAccess = startDataBase(databaseClass);
         var user = new UserData("John Doe", "password", "jdoe@byu.edu");
 
@@ -67,7 +67,7 @@ public class DataAccessTests {
     @ParameterizedTest
     @ValueSource(classes = {MySqlDataAccess.class, MemoryDataAccess.class})
     @DisplayName("Negative Test: Read Non-Existent Auth Token")
-    public void writeReadAuth_Negative(Class<? extends DataAccess> databaseClass) throws Exception {
+    public void writeReadAuthNegative(Class<? extends DataAccess> databaseClass) throws Exception {
         DataAccess dataAccess = startDataBase(databaseClass);
 
         // Negative test: Read non-existent auth token
@@ -78,7 +78,7 @@ public class DataAccessTests {
     @ParameterizedTest
     @ValueSource(classes = {MySqlDataAccess.class, MemoryDataAccess.class})
     @DisplayName("Positive Test: Delete Auth")
-    public void deleteAuth_Positive(Class<? extends DataAccess> databaseClass) throws Exception {
+    public void deleteAuthPositive(Class<? extends DataAccess> databaseClass) throws Exception {
         DataAccess dataAccess = startDataBase(databaseClass);
         var user = new UserData("John Doe", "password", "jdoe@byu.edu");
 
@@ -94,7 +94,7 @@ public class DataAccessTests {
     @ParameterizedTest
     @ValueSource(classes = {MySqlDataAccess.class, MemoryDataAccess.class})
     @DisplayName("Negative Test: Delete Non-Existent Auth Token")
-    public void deleteAuth_Negative(Class<? extends DataAccess> databaseClass) throws Exception {
+    public void deleteAuthNegative(Class<? extends DataAccess> databaseClass) throws Exception {
         DataAccess dataAccess = startDataBase(databaseClass);
 
         // Negative test: Delete non-existent auth token
@@ -106,7 +106,7 @@ public class DataAccessTests {
     @ParameterizedTest
     @ValueSource(classes = {MySqlDataAccess.class, MemoryDataAccess.class})
     @DisplayName("Positive Test: Write and Read Game")
-    public void writeReadGame_Positive(Class<? extends DataAccess> dbClass) throws Exception {
+    public void writeReadGamePositive(Class<? extends DataAccess> dbClass) throws Exception {
         DataAccess db = startDataBase(dbClass);
 
         // Positive test: Write and read game
@@ -122,7 +122,7 @@ public class DataAccessTests {
     @ParameterizedTest
     @ValueSource(classes = {MySqlDataAccess.class, MemoryDataAccess.class})
     @DisplayName("Negative Test: Read Non-Existent Game")
-    public void writeReadGame_Negative(Class<? extends DataAccess> dbClass) throws Exception {
+    public void writeReadGameNegative(Class<? extends DataAccess> dbClass) throws Exception {
         DataAccess db = startDataBase(dbClass);
 
         // Negative test: Read non-existent game
@@ -145,7 +145,7 @@ public class DataAccessTests {
     @ParameterizedTest
     @ValueSource(classes = {MySqlDataAccess.class, MemoryDataAccess.class})
     @DisplayName("Negative Test: List Games When No Games Exist")
-    public void listGames_Negative(Class<? extends DataAccess> dbClass) throws Exception {
+    public void listGamesNegative(Class<? extends DataAccess> dbClass) throws Exception {
         DataAccess db = startDataBase(dbClass);
 
         // Negative test: List games when no games exist
