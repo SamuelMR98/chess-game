@@ -361,10 +361,10 @@ public class ChessBoard {
 
     @Override
     public String toString() {
-        return toString(ChessGame.TeamColor.WHITE, null);
+        return toString(ChessGame.TeamColor.WHITE, null, false);
     }
 
-    public String toString(ChessGame.TeamColor playerColor, Collection<ChessPosition> highlights) {
+    public String toString(ChessGame.TeamColor playerColor, Collection<ChessPosition> highlights, boolean useUnicode) {
         var sb = new StringBuilder();
         try {
             var currentSquare = BOARD_WHITE;
@@ -387,9 +387,14 @@ public class ChessBoard {
                     }
                     var piece = board[i][j];
                     if (piece != null) {
-                        var color = (piece.getTeamColor() == ChessGame.TeamColor.WHITE) ? WHITE_PIECE : BLACK_PIECE;
-                        var p = PIECE_MAP.get(piece.getPieceType());
-                        sb.append(squareColor).append(color).append(" ").append(p).append(" ").append(COLOR_RESET);
+                        if (useUnicode) {
+                            var unicode = piece.toStringUnicode();
+                            sb.append(squareColor).append(" ").append(unicode).append(" ").append(COLOR_RESET);
+                        } else {
+                            var color = (piece.getTeamColor() == ChessGame.TeamColor.WHITE) ? WHITE_PIECE : BLACK_PIECE;
+                            var p = PIECE_MAP.get(piece.getPieceType());
+                            sb.append(squareColor).append(color).append(" ").append(p).append(" ").append(COLOR_RESET);
+                        }
                     } else {
                         sb.append(squareColor).append("   ").append(COLOR_RESET);
                     }

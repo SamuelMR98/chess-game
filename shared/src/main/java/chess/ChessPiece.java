@@ -87,4 +87,15 @@ public class ChessPiece {
     public String toString() {
         return String.format("%s %s", type, pieceColor);
     }
+
+    public String toStringUnicode() {
+        return switch (type) {
+            case KING -> pieceColor == ChessGame.TeamColor.WHITE ? "♔" : "♚";
+            case QUEEN -> pieceColor == ChessGame.TeamColor.WHITE ? "♕" : "♛";
+            case BISHOP -> pieceColor == ChessGame.TeamColor.WHITE ? "♗" : "♝";
+            case KNIGHT -> pieceColor == ChessGame.TeamColor.WHITE ? "♘" : "♞";
+            case ROOK -> pieceColor == ChessGame.TeamColor.WHITE ? "♖" : "♜";
+            case PAWN -> pieceColor == ChessGame.TeamColor.WHITE ? "♙" : "♟";
+        };
+    }
 }

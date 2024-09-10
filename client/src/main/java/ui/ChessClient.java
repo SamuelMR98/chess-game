@@ -25,6 +25,8 @@ public class ChessClient implements DisplayHandler {
 
     private State state = State.LOGGED_OUT;
 
+    private boolean useUnicode = true;
+
     final private ServerFacade server;
     final private WebSocketFacade webSocket;
 
@@ -134,6 +136,12 @@ public class ChessClient implements DisplayHandler {
     private String join(String[] params) throws Exception {
         verifyAuth();
         games = server.listGames(token);
+
+        System.out.println("Would you like to use unicode characters? (y/n)");
+        var scanner = new java.util.Scanner(System.in);
+        var input = scanner.nextLine();
+        useUnicode = input.equalsIgnoreCase("y");
+
         if (state == State.LOGGED_IN) {
             if (params.length == 2 && (params[1].equalsIgnoreCase("WHITE") || params[1].equalsIgnoreCase("BLACK"))) {
                 var gamePosition = Integer.parseInt(params[0]) - 1;
@@ -200,7 +208,7 @@ public class ChessClient implements DisplayHandler {
                     highlights.add(move.getEndPosition());
                 }
                 var color = state == State.BLACK ? ChessGame.TeamColor.BLACK : ChessGame.TeamColor.WHITE;
-                printGame(color, highlights);
+                printGame(color, highlights, useUnicode);
                 return "";
             }
         }
@@ -265,11 +273,11 @@ public class ChessClient implements DisplayHandler {
     // Print function helpers
     private void printGame() {
         var color = state == State.BLACK ? ChessGame.TeamColor.BLACK : ChessGame.TeamColor.WHITE;
-        printGame(color, null);
+        printGame(color, null, useUnicode);
     }
-    private void printGame(ChessGame.TeamColor color, Collection<ChessPosition> highlights) {
+    private void printGame(ChessGame.TeamColor color, Collection<ChessPosition> highlights, boolean useUnicode) {
         System.out.println("\n");
-        System.out.print((gameData.game().getBoard()).toString(color, highlights));
+        System.out.print((gameData.game().getBoard()).toString(color, highlights, useUnicode));
         System.out.println();
     }
 
